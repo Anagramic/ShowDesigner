@@ -2,6 +2,10 @@ h1 {
     color: rgb(24, 73, 132);
 }
 
-h1{
-    background-color: black;
+div.footer {
+    background-color: blueviolet;
+}
+
+#mainindex {
+    color: red;
 }
