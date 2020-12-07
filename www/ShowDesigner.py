@@ -24,6 +24,10 @@ def index():
 #def microphone(number):
 #    return render_template('number.html',number=number)
 
+
+#names on page 62
+
+
 # Models
 class InputDevice(db.Model):
     __tablename__ = "InputDevice"
