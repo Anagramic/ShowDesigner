@@ -1,0 +1,23 @@
+<html>
+    <head>   
+        <title>Show Designer</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">   
+    </head>
+   
+    <body>
+
+        <div class="header">
+            <h1>Show Designer</h1>
+        </div>
+
+        {% block main %}
+
+
+        {% endblock %}
+
+        <div class="footer">
+            <p>ShowDesigner v0.1</p>
+        </div>
+
+    </body>
+</html>
