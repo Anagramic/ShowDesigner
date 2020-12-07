@@ -17,7 +17,8 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    inDev = InputDevice.query.all()
+    return render_template('index.html', inputDevices=inDev)
 
 #@app.route('/microphone/<number>')
 #def microphone(number):
