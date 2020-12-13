@@ -17,8 +17,33 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def index():
-    inDev = InputDevice.query.all()
-    return render_template('index.html', inputDevices=inDev)
+    return render_template('index.html')
+
+@app.route('/kit')
+def kit():
+    return render_template('kit.html')
+
+@app.route('/shows')
+def shows():
+    return render_template('shows.html')
+
+@app.route('/show/<showid>')
+def show():
+    return render_template('show.html')
+
+@app.route('/design/<showid>')
+def design():
+    return render_template('design.html')
+
+@app.route('/editkit')
+def editkit():
+    return render_template('editkit.html')
+
+
+
+
+
+
 
 #@app.route('/microphone/<number>')
 #def microphone(number):

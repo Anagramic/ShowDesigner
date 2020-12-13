@@ -14,7 +14,3 @@ id3 = InputDevice(Model="NT5", Manufacturer="Rode", Type="Condenser")
 db.session.add(id3)
 
 db.session.commit()
-
-
-
-
