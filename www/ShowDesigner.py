@@ -21,12 +21,15 @@ def index():
 
 @app.route('/kit')
 def kit():
-    return render_template('kit.html')
+    StageBoxes = StageBox.query.all()
+    InputDevices = InputDevice.query.all()
+    OutputDevices = OutputDevice.query.all()
+    return render_template('kit.html',InputDevices =  InputDevices,OutputDevices = OutputDevices,StageBoxes = StageBoxes)
 
 @app.route('/shows')
 def shows():
-    shows = Show.query.all()
-    return render_template('shows.html', shows=shows)
+    Shows = Show.query.all()
+    return render_template('shows.html', shows=Shows)
 
 @app.route('/show/<showid>')
 def show():

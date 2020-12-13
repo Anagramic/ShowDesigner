@@ -4,5 +4,61 @@
 
 <h2>Kit</h2>
 
+<h3>InputDevices</h3>
 
+<table>
+    <tr>
+        <th>Manufacturer</th>
+        <th>Model</th>
+        <th>Type</th>
+    </tr>
+
+    {% for Device in InputDevices %}
+    <tr>
+        <td>{{ Device.Manufacturer }}</td>
+        <td>{{ Device.Model }}</td>
+        <td>{{ Device.Type }}</td>
+    </tr>
+    {% endfor %}
+
+       
+</table>
+
+<h3>Output Devices</h3>
+
+<table>
+    <tr>
+        <th>Manufacturer</th>
+        <th>Model</th>
+        <th>Type</th>
+    </tr>
+
+    {% for Device in OutputDevices %}
+    <tr>
+        <td>{{ Device.Manufacturer }}</td>
+        <td>{{ Device.Model }}</td>
+        <td>{{ Device.Type }}</td>
+    </tr>
+    {% endfor %}
+
+       
+</table>
+
+<h3>Stage Boxes</h3>
+
+<table>
+    <tr>
+        <th>Inputs</th>
+        <th>Outputs</th>
+    </tr>
+
+    {% for Device in StageBoxes %}
+    <tr>
+        <td>{{ Device.Inputs }}</td>
+        <td>{{ Device.Outputs }}</td>
+    </tr>
+    {% endfor %}
+
+       
+</table>
 {% endblock %}
