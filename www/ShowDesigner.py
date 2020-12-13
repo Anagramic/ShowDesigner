@@ -78,6 +78,11 @@ class Show(db.Model):
     __tablename__ = "Show"
     id = db.Column(db.Integer, primary_key=True)
     ShowName = db.Column(db.String(64))
+    Venue = db.Column(db.String(64))
+    Company = db.Column(db.String(64))
+    Date_from = db.Column(db.Date())
+    Date_to = db.Column(db.Date())
+
 
 class ShowStageBox(db.Model):
     __tablename__ = "ShowStageBox"
