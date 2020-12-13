@@ -60,6 +60,7 @@ class InputDevice(db.Model):
     Manufacturer = db.Column(db.String(64))
     Model = db.Column(db.String(64))
     Type = db.Column(db.String(64))
+    inputmapping = db.relationship('InputMapping', backref = 'InputDevice')
 
 class OutputDevice(db.Model):
     __tablename__ = "OutputDevice"
@@ -67,33 +68,45 @@ class OutputDevice(db.Model):
     Manufacturer = db.Column(db.String(64))
     Model = db.Column(db.String(64))
     Type = db.Column(db.String(64))
+    outputmapping = db.relationship('OutputMapping', backref = 'OutputDevice')
 
 class StageBox(db.Model):
     __tablename__ = "StageBox"
     id = db.Column(db.Integer, primary_key=True)
     Inputs = db.Column(db.Integer)
     Outputs = db.Column(db.Integer)
+    showstageboxes = db.relationship('ShowStageBox', backref = 'StageBox')
 
 class Show(db.Model):
     __tablename__ = "Show"
     id = db.Column(db.Integer, primary_key=True)
-    ShowName = db.Column(db.String(64))
+    Name = db.Column(db.String(64))
     Venue = db.Column(db.String(64))
     Company = db.Column(db.String(64))
     Date_from = db.Column(db.Date())
     Date_to = db.Column(db.Date())
+    showstageboxes = db.relationship('ShowStageBox', backref = 'Show')
 
 
 class ShowStageBox(db.Model):
     __tablename__ = "ShowStageBox"
     id = db.Column(db.Integer, primary_key=True)
-    ShowID = db.Column(db.Integer)
-    StageBoxID = db.Column(db.Integer)
+    show_id = db.Column(db.Integer,db.ForeignKey('Show.id'))
+    stagebox_id = db.Column(db.Integer,db.ForeignKey('StageBox.id'))
 
 class InputMapping(db.Model):
     __tablename__ = "InputMapping"
     id = db.Column(db.Integer, primary_key=True)
-    ShowStageBoxID = db.Column(db.Integer)
+    ShowStageBoxID = db.Column(db.Integer,db.ForeignKey('InputDevice.id'))
+    Port = db.Column(db.Integer)
+    InputID = db.Column(db.Integer)
+    StripPosition = db.Column(db.Integer)
+    Label = db.Column(db.String(64))
+
+class OutputMapping(db.Model):
+    __tablename__ = "OutputMapping"
+    id = db.Column(db.Integer, primary_key=True)
+    ShowStageBoxID = db.Column(db.Integer,db.ForeignKey('OutputDevice.id'))
     Port = db.Column(db.Integer)
     InputID = db.Column(db.Integer)
     StripPosition = db.Column(db.Integer)
