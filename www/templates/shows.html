@@ -4,4 +4,26 @@
 
 <h2>Shows</h2>
 
+<table>
+    <tr>
+        <th>ShowName</th>
+        <th>Date_from</th>
+        <th>Date_to</th>
+        <th>Company</th>
+        <th>Venue</th>
+    </tr>
+
+    {% for show in shows%}
+    <tr>
+        <td>{{ show['Name'] }}</td>
+        <td>{{ show['Date_from'] }}</td>
+        <td>{{ show['Date_from'] }}</td>
+        <td>{{ show['Company'] }}</td>
+        <td>{{ show['Venue'] }}</td>
+    </tr>
+    {% endfor %}
+
+       
+</table>
+
 {% endblock %}

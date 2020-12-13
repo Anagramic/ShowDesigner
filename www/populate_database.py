@@ -1,4 +1,5 @@
 from ShowDesigner import db, InputDevice, OutputDevice, StageBox, Show
+import datetime
 
 db.drop_all()
 db.create_all()
@@ -28,19 +29,19 @@ db.session.add(od3)
 db.session.commit()
 
 #Stage Boxes
-sd1 = StageBox(Inputs=16, Outputs=4)
-db.session.add(sd1)
+sb1 = StageBox(Inputs=16, Outputs=4)
+db.session.add(sb1)
 
-sd2 = StageBox(Inputs=8, Outputs=8)
-db.session.add(sd1)
+sb2 = StageBox(Inputs=8, Outputs=8)
+db.session.add(sb2)
 
 db.session.commit()
 
 #Shows
-sh1 = Show(Name="Rent", Date_from="20/09/21", Date_to="20/09/21",Company="CTC", Venue="The Leys")
+sh1 = Show(Name="Rent", Date_from=datetime.datetime(2021,9,20), Date_to=datetime.datetime(2021,9,27),Company="CTC", Venue="The Leys")
 db.session.add(sh1)
 
-sh2 = Show(Name="West Side Story", Date_from="13/04/21", Date_to="20/04/21",Company="Chaos", Venue="The Arts")
+sh2 = Show(Name="West Side Story", Date_from=datetime.datetime(2021,4,13), Date_to=datetime.datetime(2021,4,20),Company="Chaos", Venue="The Arts")
 db.session.add(sh2)
 
 db.session.commit()

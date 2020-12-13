@@ -25,7 +25,8 @@ def kit():
 
 @app.route('/shows')
 def shows():
-    return render_template('shows.html')
+    shows = Show.query.all()
+    return render_template('shows.html', shows=shows)
 
 @app.route('/show/<showid>')
 def show():
