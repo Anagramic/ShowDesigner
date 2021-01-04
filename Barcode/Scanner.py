@@ -1,18 +1,12 @@
 from PIL import Image
 import numpy as np
 
-def bin_to_dec(binary):
-    i=0
-    length = len(str(binary)) -1
-    dec = 0
-    while binary != '':
-        if binary[length] == 1:
-            dec += 2^i
-            del binary[length]
-        
-        i+=1
+def bin_to_dec(binary): 
+    decimal = 0 
+    for character in str(binary): 
+        decimal = decimal*2 + int(character) 
 
-    return(dec)
+    return(decimal)
 
 
 def conv(li,digits):   
