@@ -46,8 +46,11 @@ width, height = image.size
 line = []
 pix = image.load()
 
+#converts a tuple into one 0 to 255
 for i in range(width):
-    line.append(list(pix[i,height/2])[2])
+    line.append(list(pix[i,height//2])[2])
+
+#decides if it is closer to black or white
 
 for i in range(len(line)):
     
@@ -57,6 +60,7 @@ for i in range(len(line)):
     else:
         line[i] = 1
 
+#trims the 0s off both ends
 while True: 
     i=line[0]
     
@@ -77,11 +81,5 @@ while True:
 #print(line)
 
 print(bin_to_dec(conv(line,47)))
-
-
-
-
-
-
 #image = Image.convert('HSV')
 #image = np.array(image)
