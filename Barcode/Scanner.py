@@ -50,11 +50,22 @@ pix = image.load()
 for i in range(width):
     line.append(list(pix[i,height//2])[2])
 
-#decides if it is closer to black or white
+#finds the whitest pixel and the darkest pixel and uses that to to judge if it is a black bar or a white bar
+maximum = line[0]
+minimum = line[0]
 
+for i in line:
+    if i >= maximum:
+        maximum = i
+
+    if i <= minimum:
+        minimum = i
+
+
+#decides if it is closer to black or white
 for i in range(len(line)):
     
-    if int(line[i]) > 127:
+    if int(line[i]) > (maximum + minimum)//2 :
         line[i] = 0
     
     else:
