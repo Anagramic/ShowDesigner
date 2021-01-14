@@ -1,12 +1,69 @@
 from PIL import Image
 import numpy as np
 
-def bin_to_dec(binary): 
-    decimal = 0 
-    for character in str(binary): 
-        decimal = decimal*2 + int(character) 
+def bits_to_number(bits):
+    LHS = []
+    RHS = []
+    binRef = {'0':'0001101', '1':'0011001', '2':'0010011', '3':'0111101', '4':'0100011', '5':'0110001', '6':'0101111', '7':'0111011', '8':'0110111', '9':'0001011'}
+    temp = []
+    for i in range(4):
+        x = bits[0]
+        temp.pop(x)
+        del x
+    joined = str(''.join(temp))
+    if joined != "1010":
+        print("Unexpected starting digits of "+joined)
+    
 
-    return(decimal)
+    for number in range(6): #6 numbers to find
+        temp = []
+        for bit in range(7): #1 number is represented by 7 bits
+            temp.pop(bits[0])
+        LHS.append(binRef[''.join(temp)])
+    
+    temp = []
+    for i in range(5):
+        temp.pop(bits[0])
+    joined = str(''.join(temp))
+    if joined != "01010":
+        print("Unexpected starting digits of "+joined)
+    
+    for number in range(6): #6 numbers to find
+        temp = []
+        
+        for bit in range(7): #1 number is represented by 7 bits
+            
+            if bits[0] == '1':
+                temp.append('0')
+            
+            else:
+                temp.append('1')
+            del bits[0]
+    
+
+        RHS.append(binRef[''.join(temp)])
+    for i in range(4):
+        temp.pop(bits[0])
+    
+    joined = str(''.join(temp))        
+    if joined != "0101":
+        print("Unexpected starting digits of "+joined)
+    right = ''.join(RHS)
+    left = ''.join(LHS)
+    
+    if left != right:
+        print("Unexpected discrepancy between the left and right side")
+    
+    return(LHS)
+    
+    
+
+    
+        
+            
+
+
+        
 
 
 def conv(li,digits):   
@@ -38,7 +95,7 @@ def conv(li,digits):
     return(int(''.join(num)))       
 
 
-image=Image.open("1.jpg")
+image=Image.open("482282.png")
 image = image.convert('HSV')#makes it b+w
 #image.show()
 width, height = image.size
@@ -91,6 +148,8 @@ while True:
         break
 #print(line)
 
-print(bin_to_dec(conv(line,47)))
+print(bits_to_number(conv(line,97)))
+
+
 #image = Image.convert('HSV')
 #image = np.array(image)
