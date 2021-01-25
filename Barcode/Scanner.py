@@ -1,72 +1,75 @@
 from PIL import Image
 import numpy as np
+def interpl(bits):
+    binRef = {'0001101':'0', '0011001':'1', '0010011':'2', '0111101':'3', '0100011':'4', '0110001':'5', '0101111':'6', '0111011':'7', '0110111':'8', '0001011':'9'}
+    return(binRef[bits])
+
+def interpr(bits):
+    BinRef = {'1110010':'0', '1100110':'1', '1101100':'2', '1000010':'3', '1011100':'4', '1001110':'5', '1010000':'6', '1000100':'7', '1001000':'8', '1110100':'9'}
+    return(BinRef[bits])
+
 
 def bits_to_number(bits):
-    LHS = []
-    RHS = []
-    binRef = {'0':'0001101', '1':'0011001', '2':'0010011', '3':'0111101', '4':'0100011', '5':'0110001', '6':'0101111', '7':'0111011', '8':'0110111', '9':'0001011'}
-    temp = []
+    temp = str(bits)
+    bits = []
+    print(temp)
+    
+    for i in range(len(temp)):
+        bits.append(temp[i-1])
+
+    Lguard = []
+    Mguard = []
+    Rguard = []
+    LHS    = []
+    RHS    = []
+    
     for i in range(4):
-        x = bits[0]
-        temp.pop(x)
-        del x
-    joined = str(''.join(temp))
-    if joined != "1010":
-        print("Unexpected starting digits of "+joined)
+        Lguard.append(bits[0])
+        del bits[0] 
     
 
-    for number in range(6): #6 numbers to find
-        temp = []
-        for bit in range(7): #1 number is represented by 7 bits
-            temp.pop(bits[0])
-        LHS.append(binRef[''.join(temp)])
-    
-    temp = []
-    for i in range(5):
-        temp.pop(bits[0])
-    joined = str(''.join(temp))
-    if joined != "01010":
-        print("Unexpected starting digits of "+joined)
-    
-    for number in range(6): #6 numbers to find
-        temp = []
-        
-        for bit in range(7): #1 number is represented by 7 bits
-            
-            if bits[0] == '1':
-                temp.append('0')
-            
-            else:
-                temp.append('1')
+    for i in range(6):
+        digit=[]
+        for bit in range(7):
+            digit.append(bits[0])
             del bits[0]
+        
+        LHS.append(interpl(''.join(digit)))
     
-
-        RHS.append(binRef[''.join(temp)])
+    for i in range(5):
+        Mguard.append(bits[0])
+        del bits[0]
+    
+    for i in range(6):
+        digit=[]
+        for bit in range(7):
+            digit.append(bits[0])
+            del bits[0]
+        
+        RHS.append(interpr(''.join(digit)))
+    
     for i in range(4):
-        temp.pop(bits[0])
+        Rguard.append(bits[0])
+        del bits[0]
     
-    joined = str(''.join(temp))        
-    if joined != "0101":
-        print("Unexpected starting digits of "+joined)
-    right = ''.join(RHS)
-    left = ''.join(LHS)
+    if ''.join(Lguard) != '1010':
+        print("Left guard incorrect")
     
-    if left != right:
-        print("Unexpected discrepancy between the left and right side")
+    if ''.join(Mguard) != '01010':
+        print("Mid guard incorrect")
     
-    return(LHS)
+    if ''.join(Rguard) != '0101':
+        print("Right guard incorrect")
     
+    if LHS != RHS:
+        print("Discrepancy between left and right side")
     
-
-    
-        
-            
-
+    return(''.join(LHS))
 
         
-
 
 def conv(li,digits):   
+    #method 1
     num = []
     
     for i in range(digits):
@@ -91,11 +94,23 @@ def conv(li,digits):
         
         else:
             num.append('1')
+    #method1 = num
+
+    ##method2
+    #num = []
+    #(len(li)/dig)/2 = Mid
+    #if Type(Mid) == 'float':
+    #    mid += 0.5
+   # 
+   # for i in range(digits):
+   #     num.append(li[mid+(len(li)/digits)*(i-1)])
+
+
     
     return(int(''.join(num)))       
 
 
-image=Image.open("482282.png")
+image=Image.open("test1.jpg")
 image = image.convert('HSV')#makes it b+w
 #image.show()
 width, height = image.size
@@ -146,7 +161,7 @@ while True:
     
     else:
         break
-#print(line)
+print(line)
 
 print(bits_to_number(conv(line,97)))
 

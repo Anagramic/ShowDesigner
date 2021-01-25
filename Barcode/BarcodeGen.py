@@ -23,7 +23,7 @@ OddP = {'0':'0001101', '1':'0011001', '2':'0010011', '3':'0111101', '4':'0100011
 dec = getNew()
 
 binary = []
-for i in range (len(dec)):
+for i in range (6):
     binary.append(OddP[dec[i-1]])
 
 LHS = ''.join(binary)
@@ -39,4 +39,5 @@ RHS = ''.join(binary)
 
 code = str("1010"+LHS+'01010'+RHS+"0101")
 draw(code)
-print(len(code))
+print(code)
+print(LHS)
