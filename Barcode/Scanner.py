@@ -1,7 +1,7 @@
 from PIL import Image
 import numpy as np
 def interpl(bits):
-    binRef = {'0001101':'0', '0011001':'1', '0010011':'2', '0111101':'3', '0100011':'4', '0110001':'5', '0101111':'6', '0111011':'7', '0110111':'8', '0001011':'9'}
+    binRef = {(0,0,0,1,1,0,1):0, '0011001':'1', '0010011':'2', '0111101':'3', '0100011':'4', '0110001':'5', '0101111':'6', '0111011':'7', '0110111':'8', '0001011':'9'}
     return(binRef[bits])
 
 def interpr(bits):
@@ -12,7 +12,7 @@ def interpr(bits):
 def bits_to_number(bits):
     temp = str(bits)
     bits = []
-    print(temp)
+    #print(temp)
     
     for i in range(len(temp)):
         bits.append(temp[i-1])
@@ -30,7 +30,7 @@ def bits_to_number(bits):
 
     for i in range(6):
         digit=[]
-        for bit in range(7):
+        for _ in range(7):
             digit.append(bits[0])
             del bits[0]
         
@@ -66,48 +66,71 @@ def bits_to_number(bits):
     
     return(''.join(LHS))
 
-        
+def dict_encode(li):
+    encode = []
+    bit = 1
+    rep = 0
+    
+    for i in li:
+    
+        if i == bit:
+            rep += 1
+    
+        else:
+            encode.append(rep)
+            
+            if bit == 1:
+                bit = 0
+            
+            else:
+                bit = 1
+            rep = 0
+    print(encode)
+    return(encode)
 
-def conv(li,digits):   
-    #method 1
+
+
+
+
+
+
+def conv(pixels,digits):   
+    #li is the stream of pixels as read by the program
+    #digits is how many binary bits it should expect. normally 97
     num = []
     
-    for i in range(digits):
-#        start = li[int((len(li)/d)*(i-1))]
-#        end = li[int((len(li)/d)*i)]
-        start = int((i/digits) * len(li))
-        end = int(((i+1)/digits) * len(li))
+    #its imidiate guess of how many pixels to to expect
+    length = 0
+    #li becomes a dictioanry encoded version in a list of dictionarys format
+    clumps = dict_encode(pixels)
+
+
+    bit = 1
+
+    #for each clump of numbers, divide that by what one bit should be to see how many bars are there next to each other
+    for clump in clumps:
+
+        if len(num) == 0:
+            length = clump
+
+        reps = round(clump/length) #bars next to each other
         
-        ones =0
-        zeros =0
         
-        for pxl in range(start,end):
-            
-            if li[pxl] == 0:
-                zeros+=1
-    
-            else:
-                ones+=1
+        for _ in range( int(reps)):
+            num.append(bit) # put a 1 or 0 in for each bar next to each other there is
         
-        if zeros>ones:
-            num.append('0')
-        
+        if bit == 1:
+            bit = 0
+
         else:
-            num.append('1')
-    #method1 = num
-
-    ##method2
-    #num = []
-    #(len(li)/dig)/2 = Mid
-    #if Type(Mid) == 'float':
-    #    mid += 0.5
-   # 
-   # for i in range(digits):
-   #     num.append(li[mid+(len(li)/digits)*(i-1)])
-
-
+            bit = 1
+        
+        length = clump/reps
     
-    return(int(''.join(num)))       
+    if len(num) != digits:
+        print(f"Wrong number of digits {len(num)} vs {digits}")
+    
+    return(num)       
 
 
 image=Image.open("test1.jpg")
@@ -161,10 +184,12 @@ while True:
     
     else:
         break
-print(line)
+#print(line)
 
-print(bits_to_number(conv(line,97)))
-
-
+#print(bits_to_number(conv(line,97)))
+bits = conv(line,97)
+print(bits)
+number = bits_to_number(bits)
+print(number)
 #image = Image.convert('HSV')
 #image = np.array(image)
