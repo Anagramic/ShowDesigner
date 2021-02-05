@@ -1,54 +1,56 @@
 from PIL import Image
 import numpy as np
 def interpl(bits):
-    binRef = {(0,0,0,1,1,0,1):0, '0011001':'1', '0010011':'2', '0111101':'3', '0100011':'4', '0110001':'5', '0101111':'6', '0111011':'7', '0110111':'8', '0001011':'9'}
+    binRef = {(0,0,0,1,1,0,1):'0', (0,0,1,1,0,0,1):'1', (0,0,1,0,0,1,1):'2', (0,1,1,1,1,0,1):'3', (0,1,0,0,0,1,1):'4', (0,1,1,0,0,0,1):'5', (0,1,0,1,1,1,1):'6', (0,1,1,1,0,1,1):'7', (0,1,1,0,1,1,1):'8', (0,0,0,1,0,1,1):'9'}
     return(binRef[bits])
 
 def interpr(bits):
-    BinRef = {'1110010':'0', '1100110':'1', '1101100':'2', '1000010':'3', '1011100':'4', '1001110':'5', '1010000':'6', '1000100':'7', '1001000':'8', '1110100':'9'}
+    BinRef = {(1,1,1,0,0,1,0):'0', (1,1,0,0,1,1,0):'1', (1,1,0,1,1,0,0):'2', (1,0,0,0,0,1,0):'3', (1,0,1,1,1,0,0):'4', (1,0,0,1,1,1,0):'5', (1,0,1,0,0,0,0):'6', (1,0,0,0,1,0,0):'7', (1,0,0,1,0,0,0):'8', (1,1,1,0,1,0,0):'9'}
     return(BinRef[bits])
 
 
 def bits_to_number(bits):
-    temp = str(bits)
-    bits = []
+#    temp = bits
+#    bits = []
     #print(temp)
     
-    for i in range(len(temp)):
-        bits.append(temp[i-1])
+#    for i in range(len(temp)):
+#        bits.append(temp[i-1])
 
     Lguard = []
     Mguard = []
     Rguard = []
     LHS    = []
     RHS    = []
-    
-    for i in range(4):
+    print(bits)
+    for _ in range(4):
         Lguard.append(bits[0])
         del bits[0] 
+    print(Lguard)
     
 
-    for i in range(6):
+    for _ in range(6):
         digit=[]
         for _ in range(7):
             digit.append(bits[0])
             del bits[0]
         
-        LHS.append(interpl(''.join(digit)))
+        LHS.append(interpl(tuple(digit)))
     
-    for i in range(5):
+    for _ in range(5):
         Mguard.append(bits[0])
         del bits[0]
-    
-    for i in range(6):
+    print(len(bits))
+    print(bits)
+    for _ in range(6):
         digit=[]
-        for bit in range(7):
+        for _ in range(7):
             digit.append(bits[0])
             del bits[0]
         
-        RHS.append(interpr(''.join(digit)))
+        RHS.append(interpr(tuple(digit)))
     
-    for i in range(4):
+    for _ in range(4):
         Rguard.append(bits[0])
         del bits[0]
     
@@ -87,11 +89,6 @@ def dict_encode(li):
             rep = 0
     print(encode)
     return(encode)
-
-
-
-
-
 
 
 def conv(pixels,digits):   
