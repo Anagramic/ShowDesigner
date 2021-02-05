@@ -18,16 +18,17 @@ def draw(code):
 #arg parse possible if have time
 
 def getNew():
-    id_num = sys.argv[1]
-    try:
-        id_num = int(id_num)
-    except:
-        print("Invalid input type")
-        return()
+    #id_num = sys.argv[1]
 
-    if id_num <100000 or id_num>999999:
-        print("Invalid Range")
+    #try:
+    #    id_num = int(id_num)
 
+    #except:
+    #    print("Invalid input type")
+    #    return()
+
+    #if id_num <100000 or id_num>999999:
+    #    print("Invalid Range")
 #   return(id_num)    
     return(str(r.randint(100000,999999)))
 
