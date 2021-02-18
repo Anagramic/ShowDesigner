@@ -40,8 +40,10 @@ def bits_to_number(bits):
     for _ in range(5):
         Mguard.append(bits[0])
         del bits[0]
+    
     print(len(bits))
     print(bits)
+
     for _ in range(6):
         digit=[]
         for _ in range(7):
@@ -54,13 +56,13 @@ def bits_to_number(bits):
         Rguard.append(bits[0])
         del bits[0]
     
-    if ''.join(Lguard) != '1010':
+    if ''.join([str(x) for x in Lguard]) != '1010':
         print("Left guard incorrect")
     
-    if ''.join(Mguard) != '01010':
+    if ''.join([str(x) for x in Mguard]) != '01010':
         print("Mid guard incorrect")
     
-    if ''.join(Rguard) != '0101':
+    if ''.join([str(x) for x in Rguard]) != '0101':
         print("Right guard incorrect")
     
     if LHS != RHS:
@@ -87,6 +89,7 @@ def dict_encode(li):
             else:
                 bit = 1
             rep = 0
+    encode.append(rep)
     print(encode)
     return(encode)
 
@@ -130,7 +133,7 @@ def conv(pixels,digits):
     return(num)       
 
 
-image=Image.open("328004.png")
+image=Image.open("test4.jpg")
 image = image.convert('HSV')#makes it b+w
 #image.show()
 width, height = image.size
@@ -165,23 +168,21 @@ for i in range(len(line)):
 
 #trims the 0s off both ends
 while True: 
-    i=line[0]
     
-    if i ==0:
+    if line[0] ==0:
         del line[0]
     
     else:
         break
 
-while True: 
-    i=line[len(line)-1]
+while True:  
     
-    if i ==0:
+    if line[len(line)-1] ==0:
         del line[len(line)-1]
     
     else:
         break
-#print(line)
+print(line)
 
 #print(bits_to_number(conv(line,97)))
 bits = conv(line,97)
