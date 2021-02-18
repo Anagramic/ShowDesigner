@@ -88,7 +88,7 @@ def dict_encode(li):
             
             else:
                 bit = 1
-            rep = 0
+            rep = 1
     encode.append(rep)
     print(encode)
     return(encode)
@@ -133,7 +133,7 @@ def conv(pixels,digits):
     return(num)       
 
 
-image=Image.open("test4.jpg")
+image=Image.open("408616.png")
 image = image.convert('HSV')#makes it b+w
 #image.show()
 width, height = image.size
@@ -182,7 +182,7 @@ while True:
     
     else:
         break
-print(line)
+#print(line)
 
 #print(bits_to_number(conv(line,97)))
 bits = conv(line,97)

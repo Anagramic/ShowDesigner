@@ -2,15 +2,16 @@ from PIL import Image, ImageDraw
 import sys
 import random as r
 def draw(code):
-    width = 97
-    height = 10
+    width = 10*len(code)
+    height = 100
     img = Image.new( 'RGB', (width,height), "white") # create a new white image
     pixels = img.load() # create the pixel map
     
-    for h in range(height):
-        for w in range(width):
-            if code[w-1] == '1':
-                pixels[w-1,h-1] = (0,0,0)
+    for w in range(len(code)):
+        if code[w] == '1':
+            for w2 in range(10):
+                for h in range(height):
+                    pixels[(w*10)+w2,h] = (0,0,0)
     
     img.save(dec+".png")
 
@@ -30,7 +31,7 @@ def getNew():
     #if id_num <100000 or id_num>999999:
     #    print("Invalid Range")
 #   return(id_num)    
-    nreturn(str(r.randint(100000,999999)))
+    return(str(r.randint(100000,999999)))
     #return(str(111111))
 
 OddP = {'0':'0001101', '1':'0011001', '2':'0010011', '3':'0111101', '4':'0100011', '5':'0110001', '6':'0101111', '7':'0111011', '8':'0110111', '9':'0001011'}
