@@ -23,6 +23,7 @@ def bits_to_number(bits):
     LHS    = []
     RHS    = []
     print(bits)
+    
     for _ in range(4):
         Lguard.append(bits[0])
         del bits[0] 
@@ -31,6 +32,7 @@ def bits_to_number(bits):
 
     for _ in range(6):
         digit=[]
+        
         for _ in range(7):
             digit.append(bits[0])
             del bits[0]
@@ -101,7 +103,7 @@ def conv(pixels,digits):
     
     #its imidiate guess of how many pixels to to expect
     length = 0
-    #li becomes a dictioanry encoded version in a list of dictionarys format
+    #clumps becomes a dictioanry encoded version in a list of dictionarys format
     clumps = dict_encode(pixels)
 
 
