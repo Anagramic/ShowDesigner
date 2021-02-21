@@ -39,7 +39,7 @@ dec = getNew()
 
 binary = []
 for i in range (6):
-    binary.append(OddP[dec[i-1]])
+    binary.append(OddP[dec[i]])
 
 LHS = ''.join(binary)
 #apply two's compliment

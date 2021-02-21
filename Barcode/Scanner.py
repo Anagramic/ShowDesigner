@@ -22,12 +22,10 @@ def bits_to_number(bits):
     Rguard = []
     LHS    = []
     RHS    = []
-    print(bits)
     
     for _ in range(4):
         Lguard.append(bits[0])
         del bits[0] 
-    print(Lguard)
     
 
     for _ in range(6):
@@ -42,9 +40,6 @@ def bits_to_number(bits):
     for _ in range(5):
         Mguard.append(bits[0])
         del bits[0]
-    
-    print(len(bits))
-    print(bits)
 
     for _ in range(6):
         digit=[]
@@ -92,7 +87,6 @@ def dict_encode(li):
                 bit = 1
             rep = 1
     encode.append(rep)
-    print(encode)
     return(encode)
 
 
@@ -135,7 +129,7 @@ def conv(pixels,digits):
     return(num)       
 
 
-image=Image.open("408616.png")
+image=Image.open("740177.png")
 image = image.convert('HSV')#makes it b+w
 #image.show()
 width, height = image.size
@@ -188,7 +182,7 @@ while True:
 
 #print(bits_to_number(conv(line,97)))
 bits = conv(line,97)
-print(bits)
+print("".join([str(x) for x in bits]))
 number = bits_to_number(bits)
 print(number)
 #image = Image.convert('HSV')
