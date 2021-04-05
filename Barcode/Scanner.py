@@ -120,8 +120,9 @@ def conv(pixels,digits):
 
         else:
             bit = 1
-        
-        length = clump/reps
+ 
+        if reps != 0:
+            length = clump/reps
     
     if len(num) != digits:
         print(f"Wrong number of digits {len(num)} vs {digits}")
@@ -129,7 +130,7 @@ def conv(pixels,digits):
     return(num)       
 
 
-image=Image.open("test7.jpeg")
+image=Image.open("test4.jpg")
 image = image.convert('HSV')#makes it b+w
 #image.show()
 width, height = image.size
@@ -146,6 +147,7 @@ maximum = line[0]
 minimum = line[0]
 
 for i in line:
+    
     if i >= maximum:
         maximum = i
 
@@ -185,5 +187,3 @@ bits = conv(line,97)
 print("".join([str(x) for x in bits]))
 number = bits_to_number(bits)
 print(number)
-#image = Image.convert('HSV')
-#image = np.array(image)
