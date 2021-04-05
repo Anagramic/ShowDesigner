@@ -30,7 +30,7 @@ def getNew():
 
     if id_num <100000 or id_num>999999:
         print("Invalid Range")
-    return(id_num)    
+    return(str(id_num))    
 #    return(str(r.randint(100000,999999)))
     #return(str(111111))
 

@@ -129,7 +129,7 @@ def conv(pixels,digits):
     return(num)       
 
 
-image=Image.open("740177.png")
+image=Image.open("test7.jpeg")
 image = image.convert('HSV')#makes it b+w
 #image.show()
 width, height = image.size

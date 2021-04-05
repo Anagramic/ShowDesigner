@@ -1,0 +1,70 @@
+CREATE TABLE InputType (
+	InputID INTEGER PRIMARY KEY AUTOINCREMENT,
+	Manufacturer str,
+	Model str,
+	Type str
+);
+
+CREATE TABLE InputDevice (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	InputID int NOT NULL,
+	BarcodeID int,
+	FOREIGN KEY (InputID) REFERENCES InputType(InputID)
+);
+
+CREATE TABLE OutputType (
+	OutputID INTEGER PRIMARY KEY AUTOINCREMENT,
+	Manufacturer str,
+	Model str,
+	Type str
+);
+
+CREATE TABLE OutputDevice (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	OutputID int NOT NULL,
+	BarcodeID int,
+	FOREIGN KEY (OutputID) REFERENCES OutputType(OutputID)
+);
+
+CREATE TABLE StageBox (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	Inputs int NOT NULL,
+	Outputs int NOT NULL,
+	BarcodeID int
+);
+
+CREATE TABLE Show (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	ShowName str NOT NULL
+	
+);
+
+CREATE TABLE ShowStageBox (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	ShowID int NOT NULL,
+	StageBoxID int NOT NULL,
+	FOREIGN KEY (ShowID) REFERENCES Show(ID)
+	FOREIGN KEY (StageBoxID) REFERENCES StageBox(ID)
+);
+
+CREATE TABLE InputMapping (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	ShowStageBoxID int NOT NULL,
+	Port int NOT NULL,
+	InputID int NOT NULL,
+	StripPosition NOT NULL,
+	Label str,
+	FOREIGN KEY (ShowStageBoxID) REFERENCES ShowStageBox(ID),
+	FOREIGN KEY (InputID) REFERENCES InputDevice(ID)
+);
+
+CREATE TABLE OutputMapping (
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+	ShowStageBoxID int NOT NULL,
+	Port int NOT NULL,
+	OutputID int NOT NULL,
+	StripPosition NOT NULL,
+	Label str,
+	FOREIGN KEY (ShowStageBoxID) REFERENCES ShowStageBox(ID),
+	FOREIGN KEY (OutputID) REFERENCES OutputDevice(ID)
+);
