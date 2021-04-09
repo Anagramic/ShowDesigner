@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,g
 from jinja2 import Template
 import os
+import sqlite3
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -12,8 +13,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] =\
     "sqlite:///" + os.path.join(basedir, "data.sqlite")
 app.config["SSQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
+def getdb():
+    if "db" not in g:
+        g.db = sqlite3.connect(os.path.join(basedir, "database.db"), detect_types=sqlite3.PARSE_DECLTYPES)
 
+        g.db.row_factory = sqlite3.Row
+
+    return g.db
 
 @app.route('/')
 def index():
@@ -21,15 +28,18 @@ def index():
 
 @app.route('/kit')
 def kit():
-    StageBoxes = StageBox.query.all()
-    InputDevices = InputDevice.query.all()
-    OutputDevices = OutputDevice.query.all()
-    return render_template('kit.html',InputDevices =  InputDevices,OutputDevices = OutputDevices,StageBoxes = StageBoxes)
-
+#    StageBoxes = StageBox.query.all()
+#    InputDevices = InputDevice.query.all()
+#    OutputDevices = OutputDevice.query.all()
+#    return render_template('kit.html',InputDevices =  InputDevices,OutputDevices = OutputDevices,StageBoxes = StageBoxes)
+    pass
 @app.route('/shows')
 def shows():
-    Shows = Show.query.all()
-    return render_template('shows.html', shows=Shows)
+    db = getdb();
+    shows = db.execute(
+        "SELECT ShowName FROM Show"
+    ).fetchall()
+    return render_template('shows.html', shows=shows)
 
 @app.route('/show/<showid>')
 def show():
@@ -58,60 +68,60 @@ def editkit():
 
 
 # Models
-class InputDevice(db.Model):
-    __tablename__ = "InputDevice"
-    id = db.Column(db.Integer, primary_key=True)
-    Manufacturer = db.Column(db.String(64))
-    Model = db.Column(db.String(64))
-    Type = db.Column(db.String(64))
-    inputmapping = db.relationship('InputMapping', backref = 'InputDevice')
+# class InputDevice(db.Model):
+#     __tablename__ = "InputDevice"
+#     id = db.Column(db.Integer, primary_key=True)
+#     Manufacturer = db.Column(db.String(64))
+#     Model = db.Column(db.String(64))
+#     Type = db.Column(db.String(64))
+#     inputmapping = db.relationship('InputMapping', backref = 'InputDevice')
 
-class OutputDevice(db.Model):
-    __tablename__ = "OutputDevice"
-    id = db.Column(db.Integer, primary_key=True)
-    Manufacturer = db.Column(db.String(64))
-    Model = db.Column(db.String(64))
-    Type = db.Column(db.String(64))
-    outputmapping = db.relationship('OutputMapping', backref = 'OutputDevice')
+# class OutputDevice(db.Model):
+#     __tablename__ = "OutputDevice"
+#     id = db.Column(db.Integer, primary_key=True)
+#     Manufacturer = db.Column(db.String(64))
+#     Model = db.Column(db.String(64))
+#     Type = db.Column(db.String(64))
+#     outputmapping = db.relationship('OutputMapping', backref = 'OutputDevice')
 
-class StageBox(db.Model):
-    __tablename__ = "StageBox"
-    id = db.Column(db.Integer, primary_key=True)
-    Inputs = db.Column(db.Integer)
-    Outputs = db.Column(db.Integer)
-    showstageboxes = db.relationship('ShowStageBox', backref = 'StageBox')
+# class StageBox(db.Model):
+#     __tablename__ = "StageBox"
+#     id = db.Column(db.Integer, primary_key=True)
+#     Inputs = db.Column(db.Integer)
+#     Outputs = db.Column(db.Integer)
+#     showstageboxes = db.relationship('ShowStageBox', backref = 'StageBox')
 
-class Show(db.Model):
-    __tablename__ = "Show"
-    id = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(64))
-    Venue = db.Column(db.String(64))
-    Company = db.Column(db.String(64))
-    Date_from = db.Column(db.Date())
-    Date_to = db.Column(db.Date())
-    showstageboxes = db.relationship('ShowStageBox', backref = 'Show')
+# class Show(db.Model):
+#     __tablename__ = "Show"
+#     id = db.Column(db.Integer, primary_key=True)
+#     Name = db.Column(db.String(64))
+#     Venue = db.Column(db.String(64))
+#     Company = db.Column(db.String(64))
+#     Date_from = db.Column(db.Date())
+#     Date_to = db.Column(db.Date())
+#     showstageboxes = db.relationship('ShowStageBox', backref = 'Show')
 
 
-class ShowStageBox(db.Model):
-    __tablename__ = "ShowStageBox"
-    id = db.Column(db.Integer, primary_key=True)
-    show_id = db.Column(db.Integer,db.ForeignKey('Show.id'))
-    stagebox_id = db.Column(db.Integer,db.ForeignKey('StageBox.id'))
+# class ShowStageBox(db.Model):
+#     __tablename__ = "ShowStageBox"
+#     id = db.Column(db.Integer, primary_key=True)
+#     show_id = db.Column(db.Integer,db.ForeignKey('Show.id'))
+#     stagebox_id = db.Column(db.Integer,db.ForeignKey('StageBox.id'))
+ 
+# class InputMapping(db.Model):
+#     __tablename__ = "InputMapping"
+#     id = db.Column(db.Integer, primary_key=True)
+#     ShowStageBoxID = db.Column(db.Integer,db.ForeignKey('InputDevice.id'))
+#     Port = db.Column(db.Integer)
+#     InputID = db.Column(db.Integer)
+#     StripPosition = db.Column(db.Integer)
+#     Label = db.Column(db.String(64))
 
-class InputMapping(db.Model):
-    __tablename__ = "InputMapping"
-    id = db.Column(db.Integer, primary_key=True)
-    ShowStageBoxID = db.Column(db.Integer,db.ForeignKey('InputDevice.id'))
-    Port = db.Column(db.Integer)
-    InputID = db.Column(db.Integer)
-    StripPosition = db.Column(db.Integer)
-    Label = db.Column(db.String(64))
-
-class OutputMapping(db.Model):
-    __tablename__ = "OutputMapping"
-    id = db.Column(db.Integer, primary_key=True)
-    ShowStageBoxID = db.Column(db.Integer,db.ForeignKey('OutputDevice.id'))
-    Port = db.Column(db.Integer)
-    InputID = db.Column(db.Integer)
-    StripPosition = db.Column(db.Integer)
-    Label = db.Column(db.String(64))
+# class OutputMapping(db.Model):
+#     __tablename__ = "OutputMapping"
+#     id = db.Column(db.Integer, primary_key=True)
+#     ShowStageBoxID = db.Column(db.Integer,db.ForeignKey('OutputDevice.id'))
+#     Port = db.Column(db.Integer)
+#     InputID = db.Column(db.Integer)
+#     StripPosition = db.Column(db.Integer)
+#     Label = db.Column(db.String(64))
