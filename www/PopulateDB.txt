@@ -1,0 +1,32 @@
+INSERT INTO Show (ShowName) VALUES("Rent");
+
+INSERT INTO StageBox (Inputs, Outputs, BarcodeID) VALUES("16","4","301219");
+INSERT INTO StageBox (Inputs, Outputs, BarcodeID) VALUES("8", "8","351885");
+
+INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Shure","SM57","Dynamic");
+INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Shure","SM58","Dynamic");
+INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Senheiser","EW112","Radio");
+INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Behringer","Ultra-di","DI box");
+
+INSERT INTO InputDevice (InputID,BarcodeID) VALUES("1","121575");
+INSERT INTO InputDevice (InputID,BarcodeID) VALUES("2","189073");
+INSERT INTO InputDevice (InputID,BarcodeID) VALUES("3","187264");
+INSERT INTO InputDevice (InputID,BarcodeID) VALUES("4","121945");
+INSERT INTO InputDevice (InputID,BarcodeID) VALUES("1","138475");
+
+INSERT INTO OutputType (Manufacturer,Model,Type) VALUES("Behringer","Ha-4000","Headphone amp");
+INSERT INTO OutputType (Manufacturer,Model,Type) VALUES("Titan","TD-12","Speaker");
+INSERT INTO OutputType (Manufacturer,Model,Type) VALUES("Behringer","VQ1500D","Subwoofer");
+
+INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("1","221575");
+INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("2","289073");
+INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("3","287264");
+INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("2","289043");
+
+INSERT INTO ShowStageBox (ShowID,StageBoxID) VALUES("1","1");
+INSERT INTO ShowStageBox (ShowID,StageBoxID) VALUES("1","2");
+
+INSERT INTO InputMapping (ShowStageBoxID,Port,InputID,StripPosition,Label) VALUES("1","1","1","7","Snare");
+INSERT INTO InputMapping (ShowStageBoxID,Port,InputID,StripPosition,Label) VALUES("2","5","3","4","Lead vox 1");
+
+INSERT INTO OutputMapping(ShowStageBoxID,Port,OutputID,StripPosition,Label) VALUES("1","3","2","12","PA Centre");

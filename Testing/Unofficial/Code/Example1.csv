@@ -1,0 +1,11 @@
+﻿ID,Type,model,path,port,who,cable,colour
+1,mic,sm57,7,1,Saxophone,XLR,
+2,mic,sm57,7,2,Trumpet,XLR,
+3,radio,senhiser,4,1,Vocal,Radio,Bage
+4,reciver,senhiser,8,1,,XLR,
+5,speaker,TD-12,8,,Left,,
+6,speaker,TD-12,8,,Right,,
+7,stage box,DX 168,,1,,,
+8,stage box,DX 168,7,A,,,
+9,mixer rack,DM0,,,,,
+10,surface,C2500,,,,CAT 5,
