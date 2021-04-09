@@ -1,0 +1,7 @@
+#Kit List
+SELECT Inputdevice.ID, InputType.Manufacturer, InputType.Model, InputType.Type FROM InputType, InputDevice WHERE InputDevice.InputID = InputType.InputID;
+
+SELECT Outputdevice.ID, OutputType.Manufacturer, OutputType.Model, OutputType.Type FROM OutputType, OutputDevice WHERE OutputDevice.OutputID = OutputType.OutputID;
+
+SELECT  StageBox.ID, StageBox.Inputs, StageBox.Outputs
+SELECT InputMapping.Port, InputMapping.Port, InputMapping.StripPosition, InputMapping.StripPosition, Inputmapping.Label, 

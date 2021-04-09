@@ -6,6 +6,7 @@ INSERT INTO StageBox (Inputs, Outputs, BarcodeID) VALUES("8", "8","351885");
 INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Shure","SM57","Dynamic");
 INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Shure","SM58","Dynamic");
 INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Senheiser","EW112","Radio");
+INSERT INTO InputType (Manufacturer, Model, Type) VALUES("Behringer","Ultra-di","DI box");
 
 INSERT INTO InputDevice (InputID,BarcodeID) VALUES("1","121575");
 INSERT INTO InputDevice (InputID,BarcodeID) VALUES("2","189073");
@@ -20,6 +21,7 @@ INSERT INTO OutputType (Manufacturer,Model,Type) VALUES("Behringer","VQ1500D","S
 INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("1","221575");
 INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("2","289073");
 INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("3","287264");
+INSERT INTO OutputDevice (OutputID,BarcodeID) VALUES("2","289043");
 
 INSERT INTO ShowStageBox (ShowID,StageBoxID) VALUES("1","1");
 INSERT INTO ShowStageBox (ShowID,StageBoxID) VALUES("1","2");
