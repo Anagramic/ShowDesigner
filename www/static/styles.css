@@ -9,3 +9,28 @@ div.footer {
 #mainindex {
     color: red;
 }
+
+th {
+    color: white;
+    background-color: darkgray;
+}
+
+td {
+    background-color: #CCC;
+}
+
+td,th {
+    padding: 0.2em;
+}
+
+
+
+tr.input td {
+    background-color: lightgreen;
+}
+
+tr.output td {
+    background-color: lightsteelblue;
+}
+
+

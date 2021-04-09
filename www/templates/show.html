@@ -1,0 +1,69 @@
+{% extends "root.html" %}
+
+{% block main %}
+
+<h2>Kit List</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Manufacturer</th>
+        <th>Model</th>
+        <th>Type</th>
+    </tr>
+    
+    {% for Device in InDevicesKit %}
+    <tr class="input">
+        <td>{{ Device['ID'] }}</td>
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
+    </tr>
+    {% endfor %}
+    {% for Device in OutDevicesKit %}
+    <tr class="output">
+        <td>{{ Device['ID'] }}</td>
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<h2>Patch List</h2>
+<table>
+    <tr>
+        <td>Port</td>
+        <td>Manufacturer</td>
+        <td>Model</td>
+        <td>Type</td>
+        <td>ID</td>
+        <td>StripPosition</td>
+        <td>Label</td>
+    </tr>
+    
+    {% for Device in InDevicesPatch %}
+    <tr class="input">
+        <td>{{ Device['Port'] }}</td>
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
+        <td>{{ Device['ID'] }}</td>
+        <td>{{ Device['StripPosition'] }}</td>
+        <td>{{ Device['Label'] }}</td>
+    </tr>
+    {% endfor %}
+    {% for Device in OutDevicesPatch %}
+    <tr class="output">
+        <td>{{ Device['Port'] }}</td>
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
+        <td>{{ Device['ID'] }}</td>
+        <td>{{ Device['StripPosition'] }}</td>
+        <td>{{ Device['Label'] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

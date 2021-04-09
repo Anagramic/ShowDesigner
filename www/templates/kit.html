@@ -4,7 +4,8 @@
 
 <h2>Kit</h2>
 
-<h3>InputDevices</h3>
+<h3>Devices</h3>
+
 
 <table>
     <tr>
@@ -13,49 +14,40 @@
         <th>Type</th>
     </tr>
 
-    {% for Device in InputDevices %}
-    <tr>
-        <td>{{ Device.Manufacturer }}</td>
-        <td>{{ Device.Model }}</td>
-        <td>{{ Device.Type }}</td>
+    {% for Device in InDevices %}
+    <tr class="input">
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
     </tr>
     {% endfor %}
-
+    
+    {% for Device in OutDevices %}
+    <tr class="output">
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
+    </tr>
+    {% endfor %}
+    
        
 </table>
 
-<h3>Output Devices</h3>
-
-<table>
-    <tr>
-        <th>Manufacturer</th>
-        <th>Model</th>
-        <th>Type</th>
-    </tr>
-
-    {% for Device in OutputDevices %}
-    <tr>
-        <td>{{ Device.Manufacturer }}</td>
-        <td>{{ Device.Model }}</td>
-        <td>{{ Device.Type }}</td>
-    </tr>
-    {% endfor %}
-
-       
-</table>
 
 <h3>Stage Boxes</h3>
 
 <table>
     <tr>
+        <th>ID</th>
         <th>Inputs</th>
         <th>Outputs</th>
     </tr>
 
-    {% for Device in StageBoxes %}
+    {% for Device in Stageboxes %}
     <tr>
-        <td>{{ Device.Inputs }}</td>
-        <td>{{ Device.Outputs }}</td>
+        <td>{{ Device['ID'] }}</td>
+        <td>{{ Device['Inputs'] }}</td>
+        <td>{{ Device['Outputs'] }}</td>
     </tr>
     {% endfor %}
 

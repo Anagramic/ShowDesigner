@@ -28,22 +28,46 @@ def index():
 
 @app.route('/kit')
 def kit():
+    db = getdb()
+    InputInv = db.execute(
+        "SELECT Inputdevice.ID, InputType.Manufacturer, InputType.Model, InputType.Type FROM InputType, InputDevice WHERE InputDevice.InputID = InputType.InputID"
+        ).fetchall()
+    OutputInv = db.execute(
+        "SELECT Outputdevice.ID, OutputType.Manufacturer, OutputType.Model, OutputType.Type FROM OutputType, OutputDevice WHERE OutputDevice.OutputID = OutputType.OutputID"
+    ).fetchall()
+    StageBoxInv = db.execute(
+        "SELECT ID, Inputs, Outputs FROM StageBox"
+    )
 #    StageBoxes = StageBox.query.all()
 #    InputDevices = InputDevice.query.all()
 #    OutputDevices = OutputDevice.query.all()
 #    return render_template('kit.html',InputDevices =  InputDevices,OutputDevices = OutputDevices,StageBoxes = StageBoxes)
-    pass
+    return render_template("kit.html",InDevices = InputInv, OutDevices = OutputInv, Stageboxes = StageBoxInv)
 @app.route('/shows')
 def shows():
-    db = getdb();
+    db = getdb()
     shows = db.execute(
-        "SELECT ShowName FROM Show"
+        "SELECT ID,ShowName FROM Show"
     ).fetchall()
     return render_template('shows.html', shows=shows)
 
 @app.route('/show/<showid>')
-def show():
-    return render_template('show.html')
+def show(showid):
+    db = getdb()
+    Inputs = db.execute(
+        "SELECT InputDevice.ID, InputType.Manufacturer, InputType.Model, InputType.Type, InputDevice.BarcodeID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = 1"
+    ).fetchall()
+    Outputs = db.execute(
+        "SELECT OutputDevice.ID, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = 1"
+    ).fetchall()
+    
+    InPatch = db.execute(
+        "SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, ShowstageBox.ID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = 1"
+    )
+    OutPatch = db.execute(
+        "SELECT OutputMapping.Port, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, ShowstageBox.ID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = 1"
+    )
+    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch)
 
 @app.route('/design/<showid>')
 def design():
