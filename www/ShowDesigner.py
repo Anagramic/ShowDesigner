@@ -54,20 +54,57 @@ def shows():
 @app.route('/show/<showid>')
 def show(showid):
     db = getdb()
+    ShowName = db.execute(
+        "SELECT Show.ShowName FROM Show WHERE ID = ?",[showid]
+    ).fetchall()[0]["ShowName"]
+
     Inputs = db.execute(
-        "SELECT InputDevice.ID, InputType.Manufacturer, InputType.Model, InputType.Type, InputDevice.BarcodeID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = 1"
+        "SELECT InputDevice.ID, InputType.Manufacturer, InputType.Model, InputType.Type, InputDevice.BarcodeID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = ?",[showid]
     ).fetchall()
     Outputs = db.execute(
-        "SELECT OutputDevice.ID, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = 1"
+        "SELECT OutputDevice.ID, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = ?",[showid]
     ).fetchall()
     
     InPatch = db.execute(
-        "SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, ShowstageBox.ID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = 1"
-    )
+        "SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, ShowstageBox.ID, ShowStageBox.StageBoxID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = ?",[showid]
+    ).fetchall()
     OutPatch = db.execute(
-        "SELECT OutputMapping.Port, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, ShowstageBox.ID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = 1"
-    )
-    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch)
+        "SELECT OutputMapping.Port, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, ShowstageBox.ID, ShowStageBox.StageBoxID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = ?",[showid]
+    ).fetchall()
+    StageBox = db.execute(
+        "SELECT StageBox.ID, StageBox.Inputs, StageBox.Outputs FROM StageBox, ShowStageBox WHERE ShowStageBox.StageBoxID = StageBox.ID AND ShowStageBox.ShowID = ?",[showid]
+    ).fetchall()
+    StageBoxes = []
+    for Box in StageBox:
+        BoxData = {"ID":Box["ID"],"Inputs":[],"Outputs":[]}
+
+        for i in range(Box["Inputs"]):
+            PortData = {"Port":i+1, "Manufacturer":"","Model":"","Type":"","Label":""}
+            BoxData["Inputs"].append(PortData)
+               
+        for i in range(Box["Outputs"]):
+            PortData = {"Port":i+1, "Manufacturer":"","Model":"","Type":"","Label":""}
+            BoxData["Outputs"].append(PortData)
+
+
+        for device in InPatch:
+            if device["StageBoxID"] == Box["ID"]:
+                PortData = BoxData["Inputs"][device["Port"]-1]
+                PortData["Manufacturer"] = device["Manufacturer"]
+                PortData["Model"] = device["Model"]
+                PortData["Type"] = device["Type"]
+                PortData["Label"] = device["Label"]
+        
+        for device in OutPatch:
+            if device["StageBoxID"] == Box["ID"]:
+                PortData = BoxData["Outputs"][device["Port"]-1]
+                PortData["Manufacturer"] = device["Manufacturer"]
+                PortData["Model"] = device["Model"]
+                PortData["Type"] = device["Type"]
+                PortData["Label"] = device["Label"]
+
+        StageBoxes.append(BoxData)
+    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes)
 
 @app.route('/design/<showid>')
 def design():

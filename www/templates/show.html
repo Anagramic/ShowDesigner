@@ -1,6 +1,7 @@
 {% extends "root.html" %}
 
 {% block main %}
+<h2>{{ShowName}}</h2>
 
 <h2>Kit List</h2>
 
@@ -32,38 +33,83 @@
 <h2>Patch List</h2>
 <table>
     <tr>
-        <td>Port</td>
-        <td>Manufacturer</td>
-        <td>Model</td>
-        <td>Type</td>
-        <td>ID</td>
-        <td>StripPosition</td>
-        <td>Label</td>
+        <th>StageBox ID</th>
+        <th>Port</th>
+        <th>Manufacturer</th>
+        <th>Model</th>
+        <th>Type</th>
+        <th>StripPosition</th>
+        <th>Label</th>
     </tr>
     
     {% for Device in InDevicesPatch %}
     <tr class="input">
+        <td>{{ Device['ID'] }}</td>
         <td>{{ Device['Port'] }}</td>
         <td>{{ Device['Manufacturer'] }}</td>
         <td>{{ Device['Model'] }}</td>
         <td>{{ Device['Type'] }}</td>
-        <td>{{ Device['ID'] }}</td>
         <td>{{ Device['StripPosition'] }}</td>
         <td>{{ Device['Label'] }}</td>
     </tr>
     {% endfor %}
+
     {% for Device in OutDevicesPatch %}
     <tr class="output">
+        <td>{{ Device['ID'] }}</td>
         <td>{{ Device['Port'] }}</td>
         <td>{{ Device['Manufacturer'] }}</td>
         <td>{{ Device['Model'] }}</td>
         <td>{{ Device['Type'] }}</td>
-        <td>{{ Device['ID'] }}</td>
         <td>{{ Device['StripPosition'] }}</td>
         <td>{{ Device['Label'] }}</td>
     </tr>
     {% endfor %}
 </table>
+<h2>Stage Boxes</h2>
+{% for StageBox in StageBoxes %}
+<h3>Stagebox {{StageBox["ID"]}}</h3>
+<table>
+    <tr>
+        <th>Port</th>
+        <th>Manufacturer</th>
+        <th>Modle</th>
+        <th>Type</th>
+        <th>Label</th>
+    </tr>
+    {% for Device in StageBox['Inputs'] %}
+    <tr class="input">
+        <td>{{ Device['Port'] }}</td>
+        
+        {% if  Device['Manufacturer'] == "" %}
+        <td colspan = 4>Empty</td>
+        {% else %}
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
+        <td>{{ Device['Label'] }}</td>
+        {% endif %}
+
+    </tr>
+        
+    {% endfor %}
+    
+    {% for Device in StageBox['Outputs'] %}
+    <tr class="output">
+        <td>{{ Device['Port'] }}</td>
+        {% if  Device['Manufacturer'] == "" %}
+        <td colspan = 4>Empty</td>
+        {% else %}
+        <td>{{ Device['Manufacturer'] }}</td>
+        <td>{{ Device['Model'] }}</td>
+        <td>{{ Device['Type'] }}</td>
+        <td>{{ Device['Label'] }}</td>
+        {% endif %}
+    </tr>
+        
+    {% endfor %}
+</table>
+{% endfor %}
 
 
 {% endblock %}
