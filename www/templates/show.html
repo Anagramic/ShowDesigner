@@ -83,11 +83,14 @@
         
         {% if  Device['Manufacturer'] == "" %}
         <td colspan = 4>Empty</td>
+        <td>Add</td>
         {% else %}
         <td>{{ Device['Manufacturer'] }}</td>
         <td>{{ Device['Model'] }}</td>
         <td>{{ Device['Type'] }}</td>
         <td>{{ Device['Label'] }}</td>
+        {{ Device }}
+        <td><a href = "{{ url_for('Remove_Input_Mapping', InputMappingID=Device['InputMappingID']) }}">Remove</a></td>
         {% endif %}
 
     </tr>
@@ -99,11 +102,13 @@
         <td>{{ Device['Port'] }}</td>
         {% if  Device['Manufacturer'] == "" %}
         <td colspan = 4>Empty</td>
+        <td>Add</td>
         {% else %}
         <td>{{ Device['Manufacturer'] }}</td>
         <td>{{ Device['Model'] }}</td>
         <td>{{ Device['Type'] }}</td>
         <td>{{ Device['Label'] }}</td>
+        <td>Remove</td>
         {% endif %}
     </tr>
         

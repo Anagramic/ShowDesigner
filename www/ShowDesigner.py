@@ -1,4 +1,4 @@
-from flask import Flask, render_template,g
+from flask import Flask, render_template,g,redirect,url_for
 from jinja2 import Template
 import os
 import sqlite3
@@ -66,7 +66,7 @@ def show(showid):
     ).fetchall()
     
     InPatch = db.execute(
-        "SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, ShowstageBox.ID, ShowStageBox.StageBoxID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = ?",[showid]
+        "SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, ShowstageBox.ID, ShowStageBox.StageBoxID, InputMapping.ID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = ?",[showid]
     ).fetchall()
     OutPatch = db.execute(
         "SELECT OutputMapping.Port, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, ShowstageBox.ID, ShowStageBox.StageBoxID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = ?",[showid]
@@ -94,6 +94,7 @@ def show(showid):
                 PortData["Model"] = device["Model"]
                 PortData["Type"] = device["Type"]
                 PortData["Label"] = device["Label"]
+                PortData["InputMappingID"] = device[8]
         
         for device in OutPatch:
             if device["StageBoxID"] == Box["ID"]:
@@ -104,7 +105,19 @@ def show(showid):
                 PortData["Label"] = device["Label"]
 
         StageBoxes.append(BoxData)
-    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes)
+    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes, showid=showid)
+
+@app.route("/Remove_Input_Mapping/<InputMappingID>")
+def Remove_Input_Mapping(InputMappingID):
+    db = getdb()
+
+    ShowID = db.execute("SELECT ShowStageBox.ShowID FROM InputMapping, ShowStageBox WHERE InputMapping.ID=? AND InputMapping.ShowStageBoxID=ShowStageBox.ID",[InputMappingID]).fetchall()[0]['ShowID']
+
+    db.execute(
+        "DELETE FROM InputMapping WHERE ID = ?",[InputMappingID]
+    )
+
+    return redirect(url_for('show', showid=ShowID))    
 
 @app.route('/design/<showid>')
 def design():
