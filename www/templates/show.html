@@ -76,6 +76,7 @@
         <th>Modle</th>
         <th>Type</th>
         <th>Label</th>
+        <th>Add/Remove</th>
     </tr>
     {% for Device in StageBox['Inputs'] %}
     <tr class="input">
@@ -89,7 +90,6 @@
         <td>{{ Device['Model'] }}</td>
         <td>{{ Device['Type'] }}</td>
         <td>{{ Device['Label'] }}</td>
-        {{ Device }}
         <td><a href = "{{ url_for('Remove_Input_Mapping', InputMappingID=Device['InputMappingID']) }}">Remove</a></td>
         {% endif %}
 
@@ -108,7 +108,7 @@
         <td>{{ Device['Model'] }}</td>
         <td>{{ Device['Type'] }}</td>
         <td>{{ Device['Label'] }}</td>
-        <td>Remove</td>
+        <td><a href = "{{ url_for('Remove_Output_Mapping', OutputMappingID=Device['OutputMappingID']) }}">Remove</a></td>
         {% endif %}
     </tr>
         
