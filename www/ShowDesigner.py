@@ -140,15 +140,29 @@ def Remove_Output_Mapping(OutputMappingID):
 
     return redirect(url_for('show', showid=ShowID))
 
-@app.route('/RemoveShow')
+@app.route('/RemoveShow/<ShowID>')
 def RemoveShow(ShowID):
     db = getdb()
     sbID = db.execute(
         "SELECT ID FROM ShowStageBox WHERE ShowID = ?",[ShowID]
+    ).fetchall()
+
+    cur = db.cursor()
+    for i in sbID:
+        cur.execute(
+            "DELETE FROM OutputMapping WHERE ShowStageBoxID = ?",[i['ID']]
+        )
+        cur.execute(
+            "DELETE FROM InputMapping WHERE ShowStageBoxID = ?",[i['ID']]
+        )
+
+    cur.execute(
+        "DELETE FROM ShowStageBox WHERE ShowID = ?",[ShowID]
     )
-    db.execute(
-        "DELETE FROM InputMapping, OutputMapping WHERE ShowStageBox = ?",[sbID]
+    cur.execute(
+        "DELETE FROM show WHERE ID = ?",[ShowID]
     )
+    db.commit()
     return redirect("/shows")
 
 @app.route('/design/<showid>')

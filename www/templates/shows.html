@@ -14,7 +14,7 @@
     {% for show in shows%}
     <tr>
         <td>{{ show['ShowName'] }}</td>
-        <td><a href="{{ url_for('RemoveShow', showid=show['ID']) }}">Remove</a></td>
+        <td><a href="{{ url_for('RemoveShow', ShowID=show['ID']) }}">Remove</a></td>
         <td><a href="{{ url_for('show', showid=show['ID']) }}">Edit</a></td>
     </tr>
     {% endfor %}
