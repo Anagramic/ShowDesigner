@@ -12,7 +12,7 @@ let input_to_fill = null;
 $( document ).ready(function() {
     startup()
     $("#capturebarcode").hide();
-    $(".snap").click(function(){
+    $(".icon").click(function(){
         input_to_fill = $(this).prev("input");
         $("#capturebarcode").show();
     })

@@ -272,8 +272,8 @@ def AddOutputDevice():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
-@app.route('/BarcodeReader/<ShowID>')
-def BarcodeReader(ShowID):
+@app.route('/BarcodeReader')
+def BarcodeReader():
     #take the file
     #return number different file type
     return redirect(url_for('show',showid = ShowID))

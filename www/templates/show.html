@@ -144,4 +144,19 @@
     <input type="submit">
 </form>
 
+<div id="capturebarcode">
+    <div id="videodiv">
+        <div class="camera">
+            <video id="video">Video stream not available.</video>
+            <img id="photo" alt="The screen capture will appear in this box.">
+        </div>
+        <button id="startbutton">Take photo</button>
+
+        <canvas id="canvas"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ url_for('static', filename='Camera.js') }}"></script>
 {% endblock %}
