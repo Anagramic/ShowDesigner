@@ -272,13 +272,19 @@ def AddOutputDevice():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
-@app.route('/design/<showid>')
-def design():
-    return render_template('design.html')
+@app.route('/BarcodeReader/<ShowID>')
+def BarcodeReader(ShowID):
+    #take the file
+    #return number different file type
+    return redirect(url_for('show',showid = ShowID))
 
-@app.route('/editkit')
-def editkit():
-    return render_template('editkit.html')
+# @app.route('/design/<showid>')
+# def design():
+#     return render_template('design.html')
+
+# @app.route('/editkit')
+# def editkit():
+#     return render_template('editkit.html')
 
 
 
