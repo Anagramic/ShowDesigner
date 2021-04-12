@@ -120,8 +120,9 @@
 {% endfor %}
 
 <h2>Add a stage box</h2>
+
 <form action="{{ url_for('AddStageBox') }}" method="post">
-    <input type="hidden" name="ShowID" value={{}}>
+    <input type="hidden" name="ShowID" value={{showid}}>
     <select name="StageBoxID">
         {% for StageBox in sbids %}
                 <option value={{StageBox}}>StageBox {{StageBox}}</option>

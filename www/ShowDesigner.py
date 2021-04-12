@@ -107,18 +107,29 @@ def show(showid):
 
         StageBoxes.append(BoxData)
     
-    Allsbids = db.execute(
+    Allsbids_sql = db.execute(
         "SELECT ID FROM StageBox"
-    )
+    ).fetchall()
     
-    sbidsInShow = db.execute(
+    sbidsInShow_sql = db.execute(
         "SELECT StageBoxID FROM ShowStageBox WHERE ShowID = ?",[showid]
-    )
-    for sb in Allsbids:
-        if sb in sbidsInShow:
-            Allsbids.remove(sb)
-    
-    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes, showid=showid,sbids = Allsbids)
+    ).fetchall()
+
+    Allsbids = []
+    for i in Allsbids_sql:
+        Allsbids.append(i['ID'])
+
+    sbidsInShow = []
+    for i in sbidsInShow_sql:
+        sbidsInShow.append(i['StageBoxID'])
+
+    sbids = []
+
+    for i in Allsbids:
+        if not i in sbidsInShow:
+            sbids.append(i)
+
+    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes, showid=showid,sbids = sbids)
 
 @app.route("/Remove_Input_Mapping/<InputMappingID>")
 def Remove_Input_Mapping(InputMappingID):
@@ -189,15 +200,16 @@ def AddShow():
     return redirect(url_for("shows"))
 
 @app.route('/AddStageBox', methods=["POST"])
-def AddStageBox(ShowID):
+def AddStageBox():
     StageBox = request.form['StageBoxID']
+    ShowID = request.form["ShowID"]
     db = getdb()
     cur = db.cursor()
     cur.execute(
-        "INSERT INTO ShowStageBox VALUES ShowID=?, StageBoxID=?",[ShowID,StageBox]
+        "INSERT INTO ShowStageBox (ShowID, StageBoxID) VALUES (?,?)",[ShowID,StageBox]
     )
     db.commit()
-    return redirect(url_for('show'))
+    return redirect(url_for('show',showid = ShowID))
 
 
 @app.route('/design/<showid>')
