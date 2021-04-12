@@ -53,17 +53,17 @@ def bits_to_number(bits):
         Rguard.append(bits[0])
         del bits[0]
     
-    if ''.join([str(x) for x in Lguard]) != '1010':
-        print("Left guard incorrect")
+    #if ''.join([str(x) for x in Lguard]) != '1010':
+    #    print("Left guard incorrect")
     
-    if ''.join([str(x) for x in Mguard]) != '01010':
-        print("Mid guard incorrect")
+    #if ''.join([str(x) for x in Mguard]) != '01010':
+    #    print("Mid guard incorrect")
     
-    if ''.join([str(x) for x in Rguard]) != '0101':
-        print("Right guard incorrect")
+    #if ''.join([str(x) for x in Rguard]) != '0101':
+    #    print("Right guard incorrect")
     
-    if LHS != RHS:
-        print("Discrepancy between left and right side")
+    #if LHS != RHS:
+    #    print("Discrepancy between left and right side")
     
     return(''.join(LHS))
 
@@ -99,6 +99,8 @@ def conv(pixels,digits):
     length = 0
     #clumps becomes a dictioanry encoded version in a list of dictionarys format
     clumps = dict_encode(pixels)
+    #print(clumps)
+
 
 
     bit = 1
@@ -121,11 +123,18 @@ def conv(pixels,digits):
         else:
             bit = 1
  
-        if reps != 0:
-            length = clump/reps
+        #if reps != 0:
+        #print(length)
+        #length = clump/reps
+        #print(length)
+    #print("!")
+    #print(num)
+    #print("!")
+
     
     if len(num) != digits:
-        print(f"Wrong number of digits {len(num)} vs {digits}")
+        #print(f"Wrong number of digits {len(num)} vs {digits}")
+        pass
     
     return(num)       
 
@@ -197,5 +206,5 @@ def main(pic):
     image=Image.open(pic)
     return(read_image(image))
 
-if __name__=="__main__":
-    print(main("740177.png"))
+#if __name__=="__main__":
+#    print(main("Test 1.1.jpg"))
