@@ -6,13 +6,54 @@ SELECT Outputdevice.ID, OutputType.Manufacturer, OutputType.Model, OutputType.Ty
 SELECT  StageBox.ID, StageBox.Inputs, StageBox.Outputs
 
 #Patch list
-SELECT InputMapping.Port, InputMapping.Port, InputMapping.StripPosition, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, InputDevice.BarcodeID, StageBox.BarcodeID FROM InputDevice, InputType, StageBox, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ShowName = "Rent";
+SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, InputDevice.BarcodeID, StageBox.BarcodeID, ShowstageBox.ID FROM InputDevice, InputType, StageBox, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ShowName = "Rent";
 
-SELECT OutputMapping.Port, OutputMapping.Port, OutputMapping.StripPosition, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, StageBox.BarcodeID FROM OutputDevice, OutputType, StageBox, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ShowName = "Rent";
+SELECT OutputMapping.Port, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, StageBox.BarcodeID, ShowstageBox.ID FROM OutputDevice, OutputType, StageBox, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ShowName = "Rent";
+
+#New Patch list
+"SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, InputDevice.BarcodeID, StageBox.BarcodeID, ShowstageBox.ID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = 1"
+
+"SELECT OutputMapping.Port, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, StageBox.BarcodeID, ShowstageBox.ID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = 1"
+
 
 #Kit list
 SELECT InputDevice.ID, InputType.Manufacturer, InputType.Model, InputType.Type, InputDevice.BarcodeID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ShowName = "Rent";
 
 SELECT OutputDevice.ID, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ShowName = "Rent";
+
+#Shows
+SELECT ShowName.Show FROM Show
+
+#Stagebox fetch
+SELECT StageBox.ID, StageBox.Inputs, StageBox.Outputs FROM StageBox
+
+#Deleteing show and its contents
+SELECT ID FROM ShowStageBox WHERE ShowID = ?
+DELETE FROM InputMapping WHERE ShowStageBox = ?
+DELETE FROM OutputMapping WHERE ShowStageBox = ?
+DELETE FROM ShowStageBox WHERE ShowID = ?
+DELETE FROM show WHERE ID = ?
+
+#asign a stagebox to a show
+INSERT INTO ShowStageBox VALUES ShowID=?, StageBoxID=?
+
+#Get all available stage boxes to be added to a show
+SELECT ID FROM StageBox
+SELECT StageBoxID FROM ShowStageBox WHERE ShowID = ?
+
+#Remove a stage box and its mappings
+SELECT ID FROM ShowStageBox WHERE ShowID = ? AND StageBoxID = ?
+DELETE FROM InputMapping WHERE ShowStageBox = ?
+DELETE FROM OutputMapping WHERE ShowStageBox = ?
+DELETE FROM ShowStageBox WHERE StageBoxID = ?
+
+#add a device given it's barcode and showstagebox relation
+SELECT ID FROM InputDevice WHERE BarcodeID =?
+INSERT INTO InputMapping (ShowStageBoxID,Port,InputID,Label) VALUES (?,?,?,?)
+
+SELECT ID FROM OutputDevice WHERE BarcodeID =?
+
+#Return Show Stage id given show and stagebox
+SELECT ID FROM ShowStageBox WHERE ShowID = ? AND StageBoxID = ?
 
 

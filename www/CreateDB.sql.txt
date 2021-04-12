@@ -56,7 +56,6 @@ CREATE TABLE InputMapping (
 	ShowStageBoxID int NOT NULL,
 	Port int NOT NULL,
 	InputID int NOT NULL,
-	StripPosition NOT NULL,
 	Label str,
 	FOREIGN KEY (ShowStageBoxID) REFERENCES ShowStageBox(ID),
 	FOREIGN KEY (InputID) REFERENCES InputDevice(ID)
@@ -67,7 +66,6 @@ CREATE TABLE OutputMapping (
 	ShowStageBoxID int NOT NULL,
 	Port int NOT NULL,
 	OutputID int NOT NULL,
-	StripPosition NOT NULL,
 	Label str,
 	FOREIGN KEY (ShowStageBoxID) REFERENCES ShowStageBox(ID),
 	FOREIGN KEY (OutputID) REFERENCES OutputDevice(ID)

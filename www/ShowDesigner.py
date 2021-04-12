@@ -66,10 +66,10 @@ def show(showid):
     ).fetchall()
     
     InPatch = db.execute(
-        "SELECT InputMapping.Port, InputMapping.StripPosition, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, ShowstageBox.ID, ShowStageBox.StageBoxID, InputMapping.ID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = ?",[showid]
+        "SELECT InputMapping.Port, Inputmapping.Label, InputType.Manufacturer, InputType.Model, InputType.Type, ShowstageBox.ID, ShowStageBox.StageBoxID, InputMapping.ID FROM InputDevice, InputType, Show, ShowStageBox, InputMapping WHERE InputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND InputMapping.InputID = InputDevice.ID AND InputDevice.InputID = InputType.InputID AND Show.ID = ?",[showid]
     ).fetchall()
     OutPatch = db.execute(
-        "SELECT OutputMapping.Port, OutputMapping.StripPosition, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, ShowstageBox.ID, ShowStageBox.StageBoxID, OutputMapping.ID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = ?",[showid]
+        "SELECT OutputMapping.Port, Outputmapping.Label, OutputType.Manufacturer, OutputType.Model, OutputType.Type, OutputDevice.BarcodeID, ShowstageBox.ID, ShowStageBox.StageBoxID, OutputMapping.ID FROM OutputDevice, OutputType, Show, ShowStageBox, OutputMapping WHERE OutputMapping.ShowStageBoxID = ShowStageBox.ID AND ShowStageBox.ShowID = Show.ID  AND OutputMapping.OutputID = OutputDevice.ID AND OutputDevice.OutputID = OutputType.OutputID AND Show.ID = ?",[showid]
     ).fetchall()
     StageBox = db.execute(
         "SELECT StageBox.ID, StageBox.Inputs, StageBox.Outputs FROM StageBox, ShowStageBox WHERE ShowStageBox.StageBoxID = StageBox.ID AND ShowStageBox.ShowID = ?",[showid]
@@ -94,7 +94,7 @@ def show(showid):
                 PortData["Model"] = device["Model"]
                 PortData["Type"] = device["Type"]
                 PortData["Label"] = device["Label"]
-                PortData["InputMappingID"] = device[8]
+                PortData["InputMappingID"] = device[7]
         
         for device in OutPatch:
             if device["StageBoxID"] == Box["ID"]:
@@ -103,7 +103,7 @@ def show(showid):
                 PortData["Model"] = device["Model"]
                 PortData["Type"] = device["Type"]
                 PortData["Label"] = device["Label"]
-                PortData["OutputMappingID"] = device[8]
+                PortData["OutputMappingID"] = device[7]
 
         StageBoxes.append(BoxData)
     
@@ -226,6 +226,27 @@ def RemoveStageBox(ShowID,StageBoxID):
     ).fetchall()
     cur.execute(
         "DELETE FROM ShowStageBox WHERE ID = ?",[ShowStageBoxID[0]['ID']]
+    ).fetchall()
+    db.commit()
+    return redirect(url_for('show',showid = ShowID))
+
+@app.route('/AddInputDevice', methods=['POST'])
+def AddInputDevice():
+    ShowID = request.form['ShowID']
+    StageBoxID = request.form['StageBoxID']
+    BarcodeID = request.form['BarcodeID']
+    Label = request.form['Label']
+    Port = request.form['Port']
+    db = getdb()
+    cur = db.cursor()
+    InputID = cur.execute(
+        "SELECT ID FROM InputDevice WHERE BarcodeID =?",[BarcodeID]
+    ).fetchall()
+    ShowStageBoxID = cur.execute(
+        "SELECT ID FROM ShowStageBox WHERE ShowID = ? AND StageBoxID = ?",[ShowID,StageBoxID]
+    ).fetchall()
+    cur.execute(
+        "INSERT INTO InputMapping (ShowStageBoxID,Port,InputID,Label) VALUES (?,?,?,?)",[ShowStageBoxID[0]['ID'],Port,InputID[0]['ID'],Label]
     ).fetchall()
     db.commit()
     return redirect(url_for('show',showid = ShowID))
