@@ -1,4 +1,4 @@
-from flask import Flask, render_template,g,redirect,url_for
+from flask import Flask, render_template,g,redirect,url_for,request
 from jinja2 import Template
 import os
 import sqlite3
@@ -106,7 +106,19 @@ def show(showid):
                 PortData["OutputMappingID"] = device[8]
 
         StageBoxes.append(BoxData)
-    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes, showid=showid)
+    
+    Allsbids = db.execute(
+        "SELECT ID FROM StageBox"
+    )
+    
+    sbidsInShow = db.execute(
+        "SELECT StageBoxID FROM ShowStageBox WHERE ShowID = ?",[showid]
+    )
+    for sb in Allsbids:
+        if sb in sbidsInShow:
+            Allsbids.remove(sb)
+    
+    return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes, showid=showid,sbids = Allsbids)
 
 @app.route("/Remove_Input_Mapping/<InputMappingID>")
 def Remove_Input_Mapping(InputMappingID):
@@ -163,7 +175,30 @@ def RemoveShow(ShowID):
         "DELETE FROM show WHERE ID = ?",[ShowID]
     )
     db.commit()
-    return redirect("/shows")
+    return redirect(url_for("shows"))
+
+@app.route('/AddShow', methods=["POST"])
+def AddShow():
+    ShowName = request.form['ShowName']
+    db = getdb()
+    cur = db.cursor()
+    cur.execute(
+        "INSERT INTO show (ShowName) VALUES (?)",[ShowName]
+    )
+    db.commit()
+    return redirect(url_for("shows"))
+
+@app.route('/AddStageBox', methods=["POST"])
+def AddStageBox(ShowID):
+    StageBox = request.form['StageBoxID']
+    db = getdb()
+    cur = db.cursor()
+    cur.execute(
+        "INSERT INTO ShowStageBox VALUES ShowID=?, StageBoxID=?",[ShowID,StageBox]
+    )
+    db.commit()
+    return redirect(url_for('show'))
+
 
 @app.route('/design/<showid>')
 def design():

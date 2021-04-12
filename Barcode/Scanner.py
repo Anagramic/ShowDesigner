@@ -129,61 +129,64 @@ def conv(pixels,digits):
     
     return(num)       
 
+def main(pic):
+    image=Image.open(pic)
+    image = image.convert('HSV')#makes it b+w
+    #image.show()
+    width, height = image.size
 
-image=Image.open("test4.jpg")
-image = image.convert('HSV')#makes it b+w
-#image.show()
-width, height = image.size
+    line = []
+    pix = image.load()
 
-line = []
-pix = image.load()
+    #converts a tuple into one 0 to 255
+    for i in range(width):
+        line.append(list(pix[i,height//2])[2])
 
-#converts a tuple into one 0 to 255
-for i in range(width):
-    line.append(list(pix[i,height//2])[2])
+    #finds the whitest pixel and the darkest pixel and uses that to to judge if it is a black bar or a white bar
+    maximum = line[0]
+    minimum = line[0]
 
-#finds the whitest pixel and the darkest pixel and uses that to to judge if it is a black bar or a white bar
-maximum = line[0]
-minimum = line[0]
+    for i in line:
+        
+        if i >= maximum:
+            maximum = i
 
-for i in line:
-    
-    if i >= maximum:
-        maximum = i
-
-    if i <= minimum:
-        minimum = i
+        if i <= minimum:
+            minimum = i
 
 
-#decides if it is closer to black or white
-for i in range(len(line)):
-    
-    if int(line[i]) > (maximum + minimum)//2 :
-        line[i] = 0
-    
-    else:
-        line[i] = 1
+    #decides if it is closer to black or white
+    for i in range(len(line)):
+        
+        if int(line[i]) > (maximum + minimum)//2 :
+            line[i] = 0
+        
+        else:
+            line[i] = 1
 
-#trims the 0s off both ends
-while True: 
-    
-    if line[0] ==0:
-        del line[0]
-    
-    else:
-        break
+    #trims the 0s off both ends
+    while True: 
+        
+        if line[0] ==0:
+            del line[0]
+        
+        else:
+            break
 
-while True:  
-    
-    if line[len(line)-1] ==0:
-        del line[len(line)-1]
-    
-    else:
-        break
-#print(line)
+    while True:  
+        
+        if line[len(line)-1] ==0:
+            del line[len(line)-1]
+        
+        else:
+            break
+    #print(line)
 
-#print(bits_to_number(conv(line,97)))
-bits = conv(line,97)
-print("".join([str(x) for x in bits]))
-number = bits_to_number(bits)
-print(number)
+    #print(bits_to_number(conv(line,97)))
+    bits = conv(line,97)
+    print("".join([str(x) for x in bits]))
+    number = bits_to_number(bits)
+    return(number)
+
+if __name__=="__main__":
+    print(main("740177.png"))

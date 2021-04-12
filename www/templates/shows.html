@@ -22,4 +22,12 @@
        
 </table>
 
+
+<h2>Add new Show</h2>
+<form action="{{ url_for('AddShow') }}" method="post">
+    <input type="text" name="ShowName">
+    <input type="submit">
+</form>
+
+
 {% endblock %}

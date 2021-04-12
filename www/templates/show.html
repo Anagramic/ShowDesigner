@@ -14,20 +14,21 @@
     </tr>
     
     {% for Device in InDevicesKit %}
-    <tr class="input">
-        <td>{{ Device['ID'] }}</td>
-        <td>{{ Device['Manufacturer'] }}</td>
-        <td>{{ Device['Model'] }}</td>
-        <td>{{ Device['Type'] }}</td>
-    </tr>
+        <tr class="input">
+            <td>{{ Device['ID'] }}</td>
+            <td>{{ Device['Manufacturer'] }}</td>
+            <td>{{ Device['Model'] }}</td>
+            <td>{{ Device['Type'] }}</td>
+        </tr>
     {% endfor %}
+    
     {% for Device in OutDevicesKit %}
-    <tr class="output">
-        <td>{{ Device['ID'] }}</td>
-        <td>{{ Device['Manufacturer'] }}</td>
-        <td>{{ Device['Model'] }}</td>
-        <td>{{ Device['Type'] }}</td>
-    </tr>
+        <tr class="output">
+            <td>{{ Device['ID'] }}</td>
+            <td>{{ Device['Manufacturer'] }}</td>
+            <td>{{ Device['Model'] }}</td>
+            <td>{{ Device['Type'] }}</td>
+        </tr>
     {% endfor %}
 </table>
 <h2>Patch List</h2>
@@ -43,57 +44,59 @@
     </tr>
     
     {% for Device in InDevicesPatch %}
-    <tr class="input">
-        <td>{{ Device['ID'] }}</td>
-        <td>{{ Device['Port'] }}</td>
-        <td>{{ Device['Manufacturer'] }}</td>
-        <td>{{ Device['Model'] }}</td>
-        <td>{{ Device['Type'] }}</td>
-        <td>{{ Device['StripPosition'] }}</td>
-        <td>{{ Device['Label'] }}</td>
-    </tr>
+        <tr class="input">
+            <td>{{ Device['ID'] }}</td>
+            <td>{{ Device['Port'] }}</td>
+            <td>{{ Device['Manufacturer'] }}</td>
+            <td>{{ Device['Model'] }}</td>
+            <td>{{ Device['Type'] }}</td>
+            <td>{{ Device['StripPosition'] }}</td>
+            <td>{{ Device['Label'] }}</td>
+        </tr>
     {% endfor %}
 
     {% for Device in OutDevicesPatch %}
-    <tr class="output">
-        <td>{{ Device['ID'] }}</td>
-        <td>{{ Device['Port'] }}</td>
-        <td>{{ Device['Manufacturer'] }}</td>
-        <td>{{ Device['Model'] }}</td>
-        <td>{{ Device['Type'] }}</td>
-        <td>{{ Device['StripPosition'] }}</td>
-        <td>{{ Device['Label'] }}</td>
-    </tr>
+        <tr class="output">
+            <td>{{ Device['ID'] }}</td>
+            <td>{{ Device['Port'] }}</td>
+            <td>{{ Device['Manufacturer'] }}</td>
+            <td>{{ Device['Model'] }}</td>
+            <td>{{ Device['Type'] }}</td>
+            <td>{{ Device['StripPosition'] }}</td>
+            <td>{{ Device['Label'] }}</td>
+        </tr>
     {% endfor %}
 </table>
-<h2>Stage Boxes</h2>
-{% for StageBox in StageBoxes %}
-<h3>Stagebox {{StageBox["ID"]}}</h3>
-<table>
-    <tr>
-        <th>Port</th>
-        <th>Manufacturer</th>
-        <th>Modle</th>
-        <th>Type</th>
-        <th>Label</th>
-        <th>Add/Remove</th>
-    </tr>
-    {% for Device in StageBox['Inputs'] %}
-    <tr class="input">
-        <td>{{ Device['Port'] }}</td>
-        
-        {% if  Device['Manufacturer'] == "" %}
-        <td colspan = 4>Empty</td>
-        <td>Add</td>
-        {% else %}
-        <td>{{ Device['Manufacturer'] }}</td>
-        <td>{{ Device['Model'] }}</td>
-        <td>{{ Device['Type'] }}</td>
-        <td>{{ Device['Label'] }}</td>
-        <td><a href = "{{ url_for('Remove_Input_Mapping', InputMappingID=Device['InputMappingID']) }}">Remove</a></td>
-        {% endif %}
 
-    </tr>
+<h2>Stage Boxes</h2>
+
+{% for StageBox in StageBoxes %}
+    <h3>Stagebox {{StageBox["ID"]}}</h3>
+    <table>
+        <tr>
+            <th>Port</th>
+            <th>Manufacturer</th>
+            <th>Modle</th>
+            <th>Type</th>
+            <th>Label</th>
+            <th>Add/Remove</th>
+        </tr>
+        {% for Device in StageBox['Inputs'] %}
+        <tr class="input">
+            <td>{{ Device['Port'] }}</td>
+            
+            {% if  Device['Manufacturer'] == "" %}
+            <td colspan = 4>Empty</td>
+            <td>Add</td>
+            {% else %}
+            <td>{{ Device['Manufacturer'] }}</td>
+            <td>{{ Device['Model'] }}</td>
+            <td>{{ Device['Type'] }}</td>
+            <td>{{ Device['Label'] }}</td>
+            <td><a href = "{{ url_for('Remove_Input_Mapping', InputMappingID=Device['InputMappingID']) }}">Remove</a></td>
+            {% endif %}
+
+        </tr>
         
     {% endfor %}
     
@@ -101,14 +104,14 @@
     <tr class="output">
         <td>{{ Device['Port'] }}</td>
         {% if  Device['Manufacturer'] == "" %}
-        <td colspan = 4>Empty</td>
-        <td>Add</td>
+            <td colspan = 4>Empty</td>
+            <td>Add</td>
         {% else %}
-        <td>{{ Device['Manufacturer'] }}</td>
-        <td>{{ Device['Model'] }}</td>
-        <td>{{ Device['Type'] }}</td>
-        <td>{{ Device['Label'] }}</td>
-        <td><a href = "{{ url_for('Remove_Output_Mapping', OutputMappingID=Device['OutputMappingID']) }}">Remove</a></td>
+            <td>{{ Device['Manufacturer'] }}</td>
+            <td>{{ Device['Model'] }}</td>
+            <td>{{ Device['Type'] }}</td>
+            <td>{{ Device['Label'] }}</td>
+            <td><a href = "{{ url_for('Remove_Output_Mapping', OutputMappingID=Device['OutputMappingID']) }}">Remove</a></td>
         {% endif %}
     </tr>
         
@@ -116,5 +119,15 @@
 </table>
 {% endfor %}
 
+<h2>Add a stage box</h2>
+<form action="{{ url_for('AddStageBox') }}" method="post">
+    <input type="hidden" name="ShowID" value={{}}>
+    <select name="StageBoxID">
+        {% for StageBox in sbids %}
+                <option value={{StageBox}}>StageBox {{StageBox}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit">
+</form>
 
 {% endblock %}
