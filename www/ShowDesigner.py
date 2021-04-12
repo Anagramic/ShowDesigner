@@ -1,4 +1,4 @@
-from flask import Flask, render_template,g,redirect,url_for,request
+from flask import Flask, render_template,g,redirect,url_for,request,make_response
 from jinja2 import Template
 import os
 import sqlite3
@@ -272,11 +272,13 @@ def AddOutputDevice():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
-@app.route('/BarcodeReader')
+@app.route('/BarcodeReader', methods=['POST','GET'])
 def BarcodeReader():
     #take the file
     #return number different file type
-    return redirect(url_for('show',showid = ShowID))
+    number = make_response("123456", 200)
+    number.mimetype = "text/plain"
+    return(number)
 
 # @app.route('/design/<showid>')
 # def design():
