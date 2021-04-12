@@ -2,8 +2,13 @@ from flask import Flask, render_template,g,redirect,url_for,request,make_respons
 from jinja2 import Template
 import os
 import sqlite3
+import sys
 from flask_sqlalchemy import SQLAlchemy
-
+from PIL import Image
+from io import BytesIO
+import base64
+sys.path.insert(1, "C:/Users/james/git/ShowDesigner/Barcode")
+from Scanner import read_image
 app = Flask(__name__)
 
 #finds the directory this file file is stored under
@@ -276,7 +281,13 @@ def AddOutputDevice():
 def BarcodeReader():
     #take the file
     #return number different file type
-    number = make_response("123456", 200)
+    Picture = request.form['image']
+
+    Picture = Picture[22:]
+    image_data = Image.open(BytesIO(base64.b64decode(Picture)))
+    number_value = read_image(image_data)
+
+    number = make_response(number_value, 200)
     number.mimetype = "text/plain"
     return(number)
 
