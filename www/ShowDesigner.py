@@ -251,6 +251,27 @@ def AddInputDevice():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
+@app.route('/AddOutputDevice', methods=['POST'])
+def AddOutputDevice():
+    ShowID = request.form['ShowID']
+    StageBoxID = request.form['StageBoxID']
+    BarcodeID = request.form['BarcodeID']
+    Label = request.form['Label']
+    Port = request.form['Port']
+    db = getdb()
+    cur = db.cursor()
+    OutputID = cur.execute(
+        "SELECT ID FROM OutputDevice WHERE BarcodeID =?",[BarcodeID]
+    ).fetchall()
+    ShowStageBoxID = cur.execute(
+        "SELECT ID FROM ShowStageBox WHERE ShowID = ? AND StageBoxID = ?",[ShowID,StageBoxID]
+    ).fetchall()
+    cur.execute(
+        "INSERT INTO OutputMapping (ShowStageBoxID,Port,OutputID,Label) VALUES (?,?,?,?)",[ShowStageBoxID[0]['ID'],Port,OutputID[0]['ID'],Label]
+    ).fetchall()
+    db.commit()
+    return redirect(url_for('show',showid = ShowID))
+
 @app.route('/design/<showid>')
 def design():
     return render_template('design.html')

@@ -109,8 +109,15 @@
     <tr class="output">
         <td>{{ Device['Port'] }}</td>
         {% if  Device['Manufacturer'] == "" %}
-            <td colspan = 4>Empty</td>
-            <td>Add</td>
+            <form action="{{ url_for('AddOutputDevice') }}" method="post">
+                <input type="hidden" name="ShowID" value="{{showid}}">
+                <input type="hidden" name="StageBoxID" value="{{StageBox['ID']}}">
+                <input type="hidden" name="Port" value="{{Device['Port']}}">
+                <td colspan=2><input type="text" name="BarcodeID" placeholder="Enter Barcode"></td>
+                <td colspan=2><input type="text" name="Label" placeholder="Enter a label"></td>
+                <td><input type = 'submit' value="Add"></td>
+                
+            </form>
         {% else %}
             <td>{{ Device['Manufacturer'] }}</td>
             <td>{{ Device['Model'] }}</td>
