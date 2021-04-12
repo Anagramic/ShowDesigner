@@ -117,6 +117,7 @@
         
     {% endfor %}
 </table>
+<p><a href = "{{ url_for('RemoveStageBox',ShowID = showid,StageBoxID = StageBox['ID']) }}">Remove StageBox</a></p>
 {% endfor %}
 
 <h2>Add a stage box</h2>

@@ -211,6 +211,24 @@ def AddStageBox():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
+@app.route('/RemoveStageBox/<StageBoxID>/<ShowID>')
+def RemoveStageBox(ShowID,StageBoxID):
+    db = getdb()
+    cur = db.cursor()
+    ShowStageBoxID = cur.execute(
+        "SELECT ID FROM ShowStageBox WHERE ShowID = ? AND StageBoxID = ?",[ShowID,StageBoxID]
+    ).fetchall()
+    cur.execute(
+        "DELETE FROM OutputMapping WHERE ShowStageBoxID = ?",[ShowStageBoxID[0]['ID']]
+    ).fetchall()
+    cur.execute(
+        "DELETE FROM InputMapping WHERE ShowStageBoxID = ?",[ShowStageBoxID[0]['ID']]
+    ).fetchall()
+    cur.execute(
+        "DELETE FROM ShowStageBox WHERE ID = ?",[ShowStageBoxID[0]['ID']]
+    ).fetchall()
+    db.commit()
+    return redirect(url_for('show',showid = ShowID))
 
 @app.route('/design/<showid>')
 def design():
