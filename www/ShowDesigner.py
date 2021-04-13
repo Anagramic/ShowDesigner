@@ -19,6 +19,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] =\
 app.config["SSQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 #db = SQLAlchemy(app)
+#gets the database
 def getdb():
     if "db" not in g:
         g.db = sqlite3.connect(os.path.join(basedir, "database.db"), detect_types=sqlite3.PARSE_DECLTYPES)
@@ -27,10 +28,12 @@ def getdb():
 
     return g.db
 
+#the route everything extends
 @app.route('/')
 def index():
     return render_template('index.html')
 
+#gets every device you own
 @app.route('/kit')
 def kit():
     db = getdb()
@@ -48,6 +51,8 @@ def kit():
 #    OutputDevices = OutputDevice.query.all()
 #    return render_template('kit.html',InputDevices =  InputDevices,OutputDevices = OutputDevices,StageBoxes = StageBoxes)
     return render_template("kit.html",InDevices = InputInv, OutDevices = OutputInv, Stageboxes = StageBoxInv)
+
+#gets all shows
 @app.route('/shows')
 def shows():
     db = getdb()
@@ -56,6 +61,7 @@ def shows():
     ).fetchall()
     return render_template('shows.html', shows=shows)
 
+#gets all the mappings specific to a show
 @app.route('/show/<showid>')
 def show(showid):
     db = getdb()
@@ -80,6 +86,8 @@ def show(showid):
         "SELECT StageBox.ID, StageBox.Inputs, StageBox.Outputs FROM StageBox, ShowStageBox WHERE ShowStageBox.StageBoxID = StageBox.ID AND ShowStageBox.ShowID = ?",[showid]
     ).fetchall()
     StageBoxes = []
+    
+    #Each box is given its mic next to to corrisponding port number
     for Box in StageBox:
         BoxData = {"ID":Box["ID"],"Inputs":[],"Outputs":[]}
 
@@ -136,6 +144,7 @@ def show(showid):
 
     return render_template('show.html', InDevicesKit = Inputs, OutDevicesKit = Outputs, InDevicesPatch = InPatch, OutDevicesPatch = OutPatch, ShowName = ShowName, StageBoxes = StageBoxes, showid=showid,sbids = sbids)
 
+#The route for removing the device's mapping to a stage box
 @app.route("/Remove_Input_Mapping/<InputMappingID>")
 def Remove_Input_Mapping(InputMappingID):
     db = getdb()
@@ -152,6 +161,7 @@ def Remove_Input_Mapping(InputMappingID):
 
     return redirect(url_for('show', showid=ShowID))    
 
+#The route for removing the device's mapping to a stage box
 @app.route("/Remove_Output_Mapping/<OutputMappingID>")
 def Remove_Output_Mapping(OutputMappingID):
     db = getdb()
@@ -168,6 +178,7 @@ def Remove_Output_Mapping(OutputMappingID):
 
     return redirect(url_for('show', showid=ShowID))
 
+#Where shoes are removed
 @app.route('/RemoveShow/<ShowID>')
 def RemoveShow(ShowID):
     db = getdb()
@@ -193,6 +204,7 @@ def RemoveShow(ShowID):
     db.commit()
     return redirect(url_for("shows"))
 
+#Takes a string through post and makes a blank show called that
 @app.route('/AddShow', methods=["POST"])
 def AddShow():
     ShowName = request.form['ShowName']
@@ -204,6 +216,7 @@ def AddShow():
     db.commit()
     return redirect(url_for("shows"))
 
+#Where you can add stageboxes to a show
 @app.route('/AddStageBox', methods=["POST"])
 def AddStageBox():
     StageBox = request.form['StageBoxID']
@@ -216,6 +229,7 @@ def AddStageBox():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
+#Where you can remove a stage box and all its mapping so no extra data has to be stored
 @app.route('/RemoveStageBox/<StageBoxID>/<ShowID>')
 def RemoveStageBox(ShowID,StageBoxID):
     db = getdb()
@@ -235,6 +249,7 @@ def RemoveStageBox(ShowID,StageBoxID):
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
+#Maps a device to a stageboxe's port
 @app.route('/AddInputDevice', methods=['POST'])
 def AddInputDevice():
     ShowID = request.form['ShowID']
@@ -256,6 +271,7 @@ def AddInputDevice():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
+#Maps a device to a stageboxe's port
 @app.route('/AddOutputDevice', methods=['POST'])
 def AddOutputDevice():
     ShowID = request.form['ShowID']
@@ -277,6 +293,7 @@ def AddOutputDevice():
     db.commit()
     return redirect(url_for('show',showid = ShowID))
 
+#Takes in a base 64 image and converts it into a normal image then sends it to the read_image function in Scanner.py
 @app.route('/BarcodeReader', methods=['POST','GET'])
 def BarcodeReader():
     #take the file

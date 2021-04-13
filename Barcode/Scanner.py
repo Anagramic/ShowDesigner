@@ -1,14 +1,16 @@
 from PIL import Image
 import numpy as np
+#The encoding for the left side of the barcode
 def interpl(bits):
     binRef = {(0,0,0,1,1,0,1):'0', (0,0,1,1,0,0,1):'1', (0,0,1,0,0,1,1):'2', (0,1,1,1,1,0,1):'3', (0,1,0,0,0,1,1):'4', (0,1,1,0,0,0,1):'5', (0,1,0,1,1,1,1):'6', (0,1,1,1,0,1,1):'7', (0,1,1,0,1,1,1):'8', (0,0,0,1,0,1,1):'9'}
     return(binRef[bits])
 
+#The ENcoding for the right side of the barcode
 def interpr(bits):
     BinRef = {(1,1,1,0,0,1,0):'0', (1,1,0,0,1,1,0):'1', (1,1,0,1,1,0,0):'2', (1,0,0,0,0,1,0):'3', (1,0,1,1,1,0,0):'4', (1,0,0,1,1,1,0):'5', (1,0,1,0,0,0,0):'6', (1,0,0,0,1,0,0):'7', (1,0,0,1,0,0,0):'8', (1,1,1,0,1,0,0):'9'}
     return(BinRef[bits])
 
-
+#Where a binary string is converted into a number, guards and the other way of encoding the smae number(interpl + interpr)
 def bits_to_number(bits):
 #    temp = bits
 #    bits = []
@@ -67,6 +69,7 @@ def bits_to_number(bits):
     
     return(''.join(LHS))
 
+#take a load of one's followed by lots of 0' and so forth and returns the length of those repeats in a list always starting with a one
 def dict_encode(li):
     encode = []
     bit = 1
@@ -91,8 +94,6 @@ def dict_encode(li):
 
 
 def conv(pixels,digits):   
-    #li is the stream of pixels as read by the program
-    #digits is how many binary bits it should expect. normally 97
     num = []
     
     #its imidiate guess of how many pixels to to expect
@@ -132,9 +133,9 @@ def conv(pixels,digits):
     #print("!")
 
     
-    if len(num) != digits:
+    #if len(num) != digits:
         #print(f"Wrong number of digits {len(num)} vs {digits}")
-        pass
+    #    pass
     
     return(num)       
 
@@ -202,6 +203,7 @@ def read_image(image):
     except Exception:
         return("Failed to read barcode ")
 
+#manual way of using a file on the machine to scan
 def main(pic):
     image=Image.open(pic)
     return(read_image(image))
