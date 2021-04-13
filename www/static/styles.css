@@ -2,8 +2,8 @@ h1 {
     color: rgb(24, 73, 132);
 }
 
-div.footer {
-    background-color: blueviolet;
+body {
+    font-family: 'Noto Sans', sans-serif;
 }
 
 #mainindex {
@@ -16,6 +16,7 @@ th {
 }
 
 td {
+    
     background-color: #CCC;
 }
 
